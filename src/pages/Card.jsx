@@ -4,7 +4,7 @@ const Card = ({card}) => {
     console.log(card)
   return (
     <div>
-        <div className="h-[571px] w-full grid grid-cols-3  justify-center gap-4 mt-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
           {card.map((data,index)=>(
             <div key={index} className="w-[360px] h-[571px] bg-[#090A0833] rounded-[24px] shadow-2xl shadow-black">
               <div className="w-[152px] h-[24px] mb-8 mt-[27px] ml-[24px] gap-[14px] flex ">

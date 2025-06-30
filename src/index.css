@@ -6,6 +6,7 @@
 #root {
   background-color: #000;
   font-family: "Orbitron", sans-serif;
+  overflow: hidden;
   color: white;
 }
 
@@ -16,24 +17,11 @@
   flex: none;
   height: 660px;
   z-index: 0;
-  left: -82px;
+
   position: absolute;
-  top: -158px;
+
   width: 660px;
 }
 .font-popo{
  font-family: "Poppins", sans-serif;
-}
-
-.bgone {
-  background-color: #9747ff;
-  border-radius: 100%;
-  filter: blur(241.1999969482422px);
-  flex: none;
-  height: 660px;
-  z-index: 0;
-  right: -82px;
-  position: absolute;
-  top: 458px;
-  width: 660px;
 }
