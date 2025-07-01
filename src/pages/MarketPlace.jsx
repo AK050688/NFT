@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { FaCheckCircle, FaSearch } from "react-icons/fa";
 import NFTCard from "../components/NFTCards"; // Reuse or customize if needed
 import Card from "./Card";
@@ -74,6 +74,21 @@ const marketplace =[
 ]
 
 const Marketplace = () => {
+    const totalPages = 4; // Or make this dynamic via props
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const handlePageClick = (page) => {
+    setCurrentPage(page);
+    // Trigger any page fetch or navigation logic here
+  };
+
+  const handlePrev = () => {
+    if (currentPage > 1) setCurrentPage(currentPage - 1);
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) setCurrentPage(currentPage + 1);
+  };
   return (
     <div className="min-h-screen px-4 py-16  text-white">
       <div className="bg -top-30 "></div>
@@ -89,7 +104,7 @@ const Marketplace = () => {
           <input
             type="text"
             placeholder="Search your NFTs here..."
-            className="w-full py-3 pl-12 pr-4 rounded-full bg-[#FFFFFF1A] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
+            className="w-full py-3 pl-12 pr-4 font-popo rounded-full bg-[#FFFFFF1A] text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-indigo-600"
           />
         </div>
 
@@ -125,28 +140,48 @@ const Marketplace = () => {
 </div>
         {/* Pagination/Nav Controls Placeholder */}
       {/* Pagination Controls */}
-<div className="mt-14 flex justify-center gap-3 flex-wrap">
-  <button className="bg-[#333] text-white px-4 py-2 rounded-full hover:bg-indigo-600 transition">
-    ⬅ Prev
-  </button>
+ <div className="mt-14 flex justify-center gap-3 flex-wrap px-4">
+      {/* Prev Button */}
+      <button
+        onClick={handlePrev}
+        disabled={currentPage === 1}
+        className={`hidden md:flex md:px-4 py-2 rounded-full transition ${
+          currentPage === 1
+            ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+            : "bg-[#333] text-white hover:bg-indigo-600"
+        }`}
+      >
+        ⬅ Prev
+      </button>
 
-  {[1, 2, 3, 4].map((page) => (
-    <button
-      key={page}
-      className={`px-4 py-2 rounded-full transition ${
-        page === 1
-          ? "bg-indigo-600 text-white"
-          : "bg-[#1f1f1f] text-gray-300 hover:bg-indigo-600 hover:text-white"
-      }`}
-    >
-      {page}
-    </button>
-  ))}
+      {/* Page Buttons */}
+      {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+        <button
+          key={page}
+          onClick={() => handlePageClick(page)}
+          className={`px-4 py-2 rounded-full transition text-sm md:text-base ${
+            currentPage === page
+              ? "bg-indigo-600 text-white"
+              : "bg-[#1f1f1f] text-gray-300 hover:bg-indigo-600 hover:text-white"
+          }`}
+        >
+          {page}
+        </button>
+      ))}
 
-  <button className="bg-[#333] text-white px-4 py-2 rounded-full hover:bg-indigo-600 transition">
-    Next ➡
-  </button>
-</div>
+      {/* Next Button */}
+      <button
+        onClick={handleNext}
+        disabled={currentPage === totalPages}
+        className={`hidden md:flex px-4 py-2 rounded-full transition ${
+          currentPage === totalPages
+            ? "bg-gray-700 text-gray-400 cursor-not-allowed"
+            : "bg-[#333] text-white hover:bg-indigo-600"
+        }`}
+      >
+        Next ➡
+      </button>
+    </div>
 
       </div>
     </div>

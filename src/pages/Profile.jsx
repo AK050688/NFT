@@ -22,7 +22,7 @@ const Profile = () => {
   ];
 
   return (
-    <div>
+    <div className="md:mt-24 mt-12">
       <div className="bg"></div>
     <div className="min-h-screen relative z-1  p-4 md:p-10 font-sans">
       <div className="max-w-6xl mx-auto">

@@ -1,7 +1,6 @@
 import React from 'react';
 import Sidebar from '../components/Sidebaar';
-import { MdDarkMode } from "react-icons/md";
-import { FaBell } from "react-icons/fa6";
+
 import Card from './Card';
 import {
   AreaChart,
@@ -12,6 +11,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import { IoTrendingUpOutline } from 'react-icons/io5';
+import Search from './Dashboard/Search';
 
 const data = [
   { date: "1 May", price: 220 },
@@ -167,20 +167,7 @@ const Dashboard = () => {
     <div className="ml-16 min-h-screen   p-6 space-y-10">
       {/* Top Header */}
       <Sidebar/>
-      <div className="flex  w-full items-center">
-        <input
-          type="text"
-          placeholder="Search collections..."
-          className="bg-gray-800 text-white rounded-full w-4xl px-4 py-2"
-        />
-        <div className="px-4 py-2 flex gap-4 text-3xl rounded-full font-semibold">
-<MdDarkMode />
-<FaBell />
-{/* <div className=""> */}
-  <img src="/Images/profile.png" alt="" className='w-8' />
-{/* </div> */}
-        </div>
-      </div>
+      <Search/>
 
       {/* Trending Collections */}
       {/* <div>
@@ -204,6 +191,7 @@ const Dashboard = () => {
       </div> */}
 
       {/* NFT Grid */}
+      <h1 className="font-[500] text-[24px] w-full text-center md:text-[48px]">TRENDING COLLECTION</h1>
   <Card card={marketplace}/>
 
       {/* Ethereum Price Chart Placeholder */}
@@ -267,10 +255,13 @@ const Dashboard = () => {
       </div>
 
       {/* Recent Bids */}
-     <div className="bg-gradient-to-br from-black via-gray-900 to-purple-900 p-8 rounded-lg">
-      <h2 className="text-white text-2xl font-semibold text-center mb-8 tracking-wider">RECENT BIDS</h2>
+   <div className="p-4 sm:p-8 rounded-lg">
+      <h2 className="text-white text-xl sm:text-2xl font-semibold text-center mb-6 sm:mb-8 tracking-wider">
+        RECENT BIDS
+      </h2>
 
-      <div className="grid grid-cols-5 text-white text-sm mb-3 px-6">
+      {/* Table Headers - Only visible on medium and up */}
+      <div className="hidden md:grid grid-cols-5 text-white text-sm mb-4 px-2 sm:px-6">
         <p className="col-span-1">Item List</p>
         <p className="text-center">Open Price</p>
         <p className="text-center">Your Offer</p>
@@ -278,13 +269,15 @@ const Dashboard = () => {
         <p className="text-right">Time Left</p>
       </div>
 
+      {/* Bid Items */}
       <div className="space-y-4">
         {bids.map((bid) => (
           <div
             key={bid.id}
-            className="bg-[#FFFFFF1A] rounded-2xl px-6 py-4 flex items-center justify-between shadow-lg"
+            className="bg-[#FFFFFF1A] rounded-2xl px-4 sm:px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg text-white text-sm"
           >
-            <div className="flex items-center gap-4 w-1/5">
+            {/* Item Info */}
+            <div className="flex items-center gap-3 md:w-1/5 mb-3 md:mb-0">
               <img
                 src={bid.image}
                 alt={bid.title}
@@ -295,10 +288,26 @@ const Dashboard = () => {
                 <p className="text-gray-400 text-xs">{bid.user}</p>
               </div>
             </div>
-            <p className="w-1/5 text-center">{bid.price}</p>
-            <p className="w-1/5 text-center">{bid.offer}</p>
-            <p className="w-1/5 text-center">{bid.offer}</p>
-            <p className="w-1/5 text-right">{bid.timeLeft}</p>
+
+            {/* Labels and Values */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between w-full md:w-4/5 gap-2 md:gap-0">
+              <div className="md:w-1/4 text-center md:text-left">
+                <span className="md:hidden text-gray-400">Open Price: </span>
+                {bid.price}
+              </div>
+              <div className="md:w-1/4 text-center">
+                <span className="md:hidden text-gray-400">Your Offer: </span>
+                {bid.offer}
+              </div>
+              <div className="md:w-1/4 text-center">
+                <span className="md:hidden text-gray-400">Recent Offer: </span>
+                {bid.offer}
+              </div>
+              <div className="md:w-1/4 text-right">
+                <span className="md:hidden text-gray-400">Time Left: </span>
+                {bid.timeLeft}
+              </div>
+            </div>
           </div>
         ))}
       </div>

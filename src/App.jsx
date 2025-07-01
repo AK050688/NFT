@@ -1,61 +1,57 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from "react-router-dom";
-
-import Footer from "./components/Footer";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
-import NavBar from "./pages/NavBar";
 import Profile from "./pages/Profile";
-import Marketplace from "./pages/MarketPlace";
-import DashboardPage from "./pages/Dashboard";
+import Marketplace from "./pages/Marketplace";
 import ConnectWallet from "./pages/Wallet";
-import { useSelector } from "react-redux";
+import Footer from "./components/Footer";
+import Dashboard from "./pages/Dashboard";
 import WalletConnected from "./pages/ConnectedWallet";
+import NavBar from "./pages/NavBar";
 import WelcomeOverlay from "./components/WelcomePage";
+import TrendingBids from "./pages/Dashboard/TrendingBids";
+import Saved from "./pages/Dashboard/Saved";
+import Collections from "./pages/Dashboard/Collections";
 
-// import Navbar from "./components/Navbar"; // Uncomment if you have it
 
-const App = () => {
-  const isConnected = useSelector((state) => state.wallet.connected);
+function AppLayout() {
+  const location = useLocation();
+  const hideNavbarOnRoutes = ["/dash","/trending-bids","/saved","/collections","/rare-NFTS"];
+  const shouldHideNavbar = hideNavbarOnRoutes.includes(location.pathname);
 
-  //   const location = useLocation();
-  // const hideNavbarOnRoutes = [""];
-  // const shouldHideNavbar = hideNavbarOnRoutes.includes(location.pathname);
+  return (
+    <div className="flex flex-col min-h-screen">
+      <WelcomeOverlay />
+      {/* Conditionally render Navbar */}
+      {!shouldHideNavbar && <NavBar />}
+      
+      <main className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/market-place" element={<Marketplace />} />
+          <Route path="/connect" element={<ConnectWallet />} />
+          <Route path="/connected-wallet" element={<WalletConnected />} />
+       
+          <Route path="/dash" element={<Dashboard />} />
+          <Route path='/trending-bids' element={<TrendingBids/>}/>
+          <Route path='/saved' element={<Saved/>}/>
+          <Route path="/collections" element={<Collections/>}/>
+        </Routes>
+      </main>
+
+      {/* Footer always visible */}
+      <Footer />
+    </div>
+  );
+}
+
+// Root App component where Router wraps everything
+function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen">
-        <WelcomeOverlay/>
-        {/* Navbar here (if available) */}
-        <NavBar />
-
-        <main className="flex-grow">
-          <Routes>
-         
-            <Route path="/" element={<Home />} />
-
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/market-place" element={<Marketplace />} />
-            <Route path="/dash" element={<DashboardPage />} />
-            {/* <Route
-              path="/"
-              element={<Navigate to={isConnected ? "/wallet" : "/connect"} />}
-            /> */}
-            <Route path="/connect" element={<ConnectWallet />} />
-            <Route path="/connected-wallet" element={<WalletConnected />} />
-            {/* <Route
-              path="/wallet"
-              element={
-                isConnected ? <WalletConnected /> : <Navigate to="/connect" />
-              }
-            /> */}
-            {/*  <Route path="/contact" element={<ContactPage />} /> */}
-          </Routes>
-        </main>
-
-        {/* Footer visible on all pages */}
-        <Footer />
-      </div>
+      <AppLayout />
     </Router>
   );
-};
+}
 
 export default App;
