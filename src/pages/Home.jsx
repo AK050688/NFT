@@ -103,6 +103,7 @@ const howItWork = [
   },
 ];
 const Home = () => {
+  
   return (
     <div className="">
       <div className=" md:flex relative z-1 flex-col text-center mt-28 md:px-12 justify-center w-full">
@@ -227,7 +228,7 @@ const Home = () => {
               </p>
               <p className="text-[16px] md:text-[20px] mt-4">{data.dis}</p>
             </div>
-            <FaArrowRight className="text-3xl md:text-5xl text-[#D54CFF] mt-4 md:mt-0" />
+            <FaArrowRight className="text-3xl md:text-5xl text-[#D54CFF] mt-4 md:mt-0 cursor-pointer" />
           </div>
         ))}
       </div>

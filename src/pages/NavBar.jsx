@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate()
+  
+    const handleNavigate=()=>{
+      navigate('NFTS-login')
+    }
 
   const Pages = [
     { name: "HOME", path: "/" },
@@ -40,7 +45,7 @@ const NavBar = () => {
 
           {/* Login Button - Visible on Desktop */}
           <div className="hidden md:ml-6 sm:block">
-            <button className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
+            <button onClick={handleNavigate} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
               Login
             </button>
           </div>

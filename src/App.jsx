@@ -11,6 +11,7 @@ import WelcomeOverlay from "./components/WelcomePage";
 import TrendingBids from "./pages/Dashboard/TrendingBids";
 import Saved from "./pages/Dashboard/Saved";
 import Collections from "./pages/Dashboard/Collections";
+import LoginPage from "./components/Login";
 
 
 function AppLayout() {
@@ -31,6 +32,7 @@ function AppLayout() {
           <Route path="/market-place" element={<Marketplace />} />
           <Route path="/connect" element={<ConnectWallet />} />
           <Route path="/connected-wallet" element={<WalletConnected />} />
+          <Route path="/NFTS-login" element={<LoginPage />} />
        
           <Route path="/dash" element={<Dashboard />} />
           <Route path='/trending-bids' element={<TrendingBids/>}/>
