@@ -2,6 +2,7 @@ import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import Card from "./Card";
+import CardTwo from "./CardTwo";
 
 const cardData = [
   {
@@ -130,7 +131,7 @@ const Home = () => {
       <div className="relative w-full h-[120vh]">
         {/* Watermark Hider (Top-right black box) */}
         <div
-          className="absolute  md:flex bg-[#000] top-225 md:top-[680px] w-[150px]  h-[40px] md:h-[80px]"
+          className="absolute  md:flex bg-[#000] hidden top-225 md:top-[510px] w-[150px]  h-[40px] md:h-[80px]"
           style={{
             top: "",
             right: "10px",
@@ -146,14 +147,14 @@ const Home = () => {
           frameBorder="0"
           allow="autoplay; fullscreen"
           title="Spline 3D"
-          className="w-full -top-50 md:relative md:top-0 absolute  h-[130%] md:h-[120vh]"
+          className="w-full -top-50 md:relative md:-top-40 absolute  h-[130%] md:h-[120vh]"
         ></iframe>
       </div>
 
       <div className="bg top-80 z-10 -right-60"></div>
 
       <div className="bgone"></div>
-      <div className="flex  relative z-1 -top-10  justify-center ">
+      <div className="flex  relative z-1 -top-80  justify-center ">
         <div className=" w-full  md:w-[1122px] h-[721px]">
           <h1 className="w-full text-center md:text-2xl text-[24px] h-[80px] text-white">
             TRENDING COLLECTIONS
@@ -166,12 +167,12 @@ const Home = () => {
         </div>
         <div className="bg top-100 z-0  -left-30"></div>
       </div>
-      <div className="md:flex  w-full justify-center text-center items-center mt-290 md:m-0">
+      <div className="md:flex relative -top-70 w-full justify-center text-center items-center mt-0 md:m-0">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
-      <div className="mt-8 md:mt-24">
+      <div className="mt-8 md:mt-0 relative -top-50">
         <h1 className="text-[20px] md:text-[64px] font-[500] w-full text-center">
           EXPLORE MARKETPLACE
         </h1>
@@ -188,8 +189,9 @@ const Home = () => {
           </ul>
         </div>
         <div className="flex  w-full justify-center">
-          <div className=" relative z-1">
+          <div className=" relative w-full m-4 px-12 z-1">
             <Card card={marketplace} />
+            <CardTwo card={marketplace}/>
           </div>
           <div className="bg top-600 z-0 -right-30"></div>
 
@@ -198,14 +200,13 @@ const Home = () => {
        ))} */}
         </div>
       </div>
-      <div className="felx mt-18 w-full justify-center text-center items-center ">
+      <div className="flex relative -top-30 w-full justify-center text-center items-center ">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
 
-      <div className="mt-1
-      2">
+      <div className="relative -top-10">
         <p className="font-[500] text-[20px] md:text-[64px] w-full text-center">
           HOW IT WORKS
         </p>
@@ -215,7 +216,7 @@ const Home = () => {
 
       <div className="bg top-1000 -right-30"></div>
 
-      <div className="px-6 md:px-32 relative z-1 flex flex-col gap-6 py-20">
+      <div className="px-6 md:px-32 relative z-1 flex flex-col gap-6 py-">
         {howItWork.map((data, index) => (
           <div
             key={index}

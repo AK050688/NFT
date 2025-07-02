@@ -8,14 +8,14 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#090A0833] rounded-t-[50px] relative z-1 text-gray-200 py-10 px-18">
+    <footer className="bg-[#090A0833] mt-12 rounded-t-[50px] relative z-1 text-gray-200 py-10 px-18">
 
 <div className="py-8 md:flex  justify-between border-b-2 border-b-[#adadad5b]">
-  <p className="font-popo w-[360px]">Join our newsletter to keep yourself updated with us.</p>
-  <div className="flex gap-6">
+  <p className="font-popo md:w-[360px]">Join our newsletter to keep yourself updated with us.</p>
+  <div className="md:flex gap-6">
 
-    <input type="text" placeholder="enter your email" className="rounded-[100px] h-[51px] px-6 bg-[#FFFFFF1A]" />
-    <button className="bg-[#D54CFF] hover:bg-[#d54cffd7] cursor-pointer py-[15px] px-[18px] rounded-3xl">  Subscribe</button>
+    <input type="text" placeholder="enter your email" className="rounded-[100px] h-[51px] px-6 mt-2 bg-[#FFFFFF1A]" />
+    <button className="bg-[#D54CFF] hover:bg-[#d54cffd7] m-2 cursor-pointer py-[15px] px-[18px] rounded-3xl">  Subscribe</button>
   </div>
 
 </div>

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import {FaSearch } from "react-icons/fa";
 
 import Card from "./Card";
+import CardTwo from "./CardTwo";
 
 
 
@@ -41,11 +42,16 @@ const marketplace =[
 const Marketplace = () => {
     const totalPages = 4; // Or make this dynamic via props
   const [currentPage, setCurrentPage] = useState(1);
+  const [showAll, setShowAll] = useState(false)
 
   const handlePageClick = (page) => {
     setCurrentPage(page);
     // Trigger any page fetch or navigation logic here
   };
+
+  const isShowHandler=()=>{
+    setShowAll(!showAll)
+  }
 
   const handlePrev = () => {
     if (currentPage > 1) setCurrentPage(currentPage - 1);
@@ -74,8 +80,13 @@ const Marketplace = () => {
         </div>
 
  
-        <div className="flex  w-full justify-center">
+        <div className=" w-full justify-center">
+          <h1 className="md:text-4xl text-2xl m-4 text-center">Gaming NFTS</h1>
         <Card card={marketplace}/>
+        <button className="btn rounded-2xl bg-white/50 border-none shadow-none m-4 text-white" onClick={isShowHandler}>{showAll?"Show More..":"less "}</button>
+        {showAll &&
+        <div className="mt-12">
+        <CardTwo card={marketplace}/></div>}
 </div>
    
  <div className="mt-14 flex justify-center gap-3 flex-wrap px-4">

@@ -8,6 +8,7 @@ const NavBar = () => {
   
     const handleNavigate=()=>{
       navigate('NFTS-login')
+      setMenuOpen(false)
     }
 
   const Pages = [
@@ -77,7 +78,7 @@ const NavBar = () => {
                   {page.name}
                 </NavLink>
               ))}
-              <button className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
+              <button onClick={handleNavigate} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
                 Login
               </button>
             </div>

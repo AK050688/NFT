@@ -46,8 +46,8 @@ function LoginPage() {
             required
           />
             <input
-            type="password"
-            placeholder="Password"
+            type="text"
+            placeholder="email"
             className="w-full px-4 py-2 mb-4 border rounded-xl"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
