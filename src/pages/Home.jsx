@@ -166,7 +166,7 @@ const Home = () => {
         </div>
         <div className="bg top-100 z-0  -left-30"></div>
       </div>
-      <div className="md:flex  w-full justify-center text-center items-center mt-260 md:m-0">
+      <div className="md:flex  w-full justify-center text-center items-center mt-290 md:m-0">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
