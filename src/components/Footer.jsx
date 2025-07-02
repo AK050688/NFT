@@ -8,7 +8,7 @@ import {
 
 const Footer = () => {
   return (
-    <footer className="bg-[#090A0833] mt-12 rounded-t-[50px] relative z-1 text-gray-200 py-10 px-18">
+    <footer className="bg-[#090A0833] mt- rounded-t-[50px] relative z-1 text-gray-200 py-10 px-18">
 
 <div className="py-8 md:flex  justify-between border-b-2 border-b-[#adadad5b]">
   <p className="font-popo md:w-[360px]">Join our newsletter to keep yourself updated with us.</p>

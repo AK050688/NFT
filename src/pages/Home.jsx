@@ -147,14 +147,14 @@ const Home = () => {
           frameBorder="0"
           allow="autoplay; fullscreen"
           title="Spline 3D"
-          className="w-full -top-50 md:relative md:-top-40 absolute  h-[130%] md:h-[120vh]"
+          className="w-full -top-90 md:relative md:-top-40 absolute  h-[130%] md:h-[120vh]"
         ></iframe>
       </div>
 
       <div className="bg top-80 z-10 -right-60"></div>
 
       <div className="bgone"></div>
-      <div className="flex  relative z-1 -top-80  justify-center ">
+      <div className="flex  relative z-20 -top-110  justify-center ">
         <div className=" w-full  md:w-[1122px] h-[721px]">
           <h1 className="w-full text-center md:text-2xl text-[24px] h-[80px] text-white">
             TRENDING COLLECTIONS
@@ -167,12 +167,12 @@ const Home = () => {
         </div>
         <div className="bg top-100 z-0  -left-30"></div>
       </div>
-      <div className="md:flex relative -top-70 w-full justify-center text-center items-center mt-0 md:m-0">
+      <div className="md:flex relative -top-100 w-full justify-center text-center items-center mt-0 md:m-0">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
-      <div className="mt-8 md:mt-0 relative -top-50">
+      <div className="mt-8 md:mt-0 relative -top-90">
         <h1 className="text-[20px] md:text-[64px] font-[500] w-full text-center">
           EXPLORE MARKETPLACE
         </h1>
@@ -200,13 +200,13 @@ const Home = () => {
        ))} */}
         </div>
       </div>
-      <div className="flex relative -top-30 w-full justify-center text-center items-center ">
+      <div className="flex relative -top-70 w-full justify-center text-center items-center ">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
 
-      <div className="relative -top-10">
+      <div className="relative -top-55">
         <p className="font-[500] text-[20px] md:text-[64px] w-full text-center">
           HOW IT WORKS
         </p>
@@ -216,7 +216,7 @@ const Home = () => {
 
       <div className="bg top-1000 -right-30"></div>
 
-      <div className="px-6 md:px-32 relative z-1 flex flex-col gap-6 py-">
+      <div className="px-6 md:px-32 relative -top-50 z-1 flex flex-col gap-6 ">
         {howItWork.map((data, index) => (
           <div
             key={index}
