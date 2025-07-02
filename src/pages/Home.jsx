@@ -130,12 +130,12 @@ const Home = () => {
       <div className="relative w-full h-[120vh]">
         {/* Watermark Hider (Top-right black box) */}
         <div
-          className="absolute bg-[#000] top-216 md:top-[680px]"
+          className="absolute  md:flex bg-[#000] top-225 md:top-[680px] w-[150px]  h-[40px] md:h-[80px]"
           style={{
             top: "",
             right: "10px",
-            width: "150px",
-            height: "80px",
+            // width: "150px",
+            // height: "80px",
             zIndex: 10,
           }}
         ></div>
