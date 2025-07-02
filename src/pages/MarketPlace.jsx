@@ -1,45 +1,10 @@
 import React, { useState } from "react";
-import { FaCheckCircle, FaSearch } from "react-icons/fa";
-import NFTCard from "../components/NFTCards"; // Reuse or customize if needed
+import {FaSearch } from "react-icons/fa";
+
 import Card from "./Card";
 
-const nftData = [
-  {
-    id: 1,
-    image: "https://via.placeholder.com/300x300?text=NFT+1",
-    title: "Monkey rage",
-    creator: "Micheal",
-    price: "12,555 USDT",
-  },
-  {
-    id: 2,
-    image: "https://via.placeholder.com/300x300?text=NFT+2",
-    title: "Monkey rage",
-    creator: "Micheal",
-    price: "12,555 USDT",
-  },
-  {
-    id: 3,
-    image: "https://via.placeholder.com/300x300?text=NFT+3",
-    title: "Monkey rage",
-    creator: "Micheal",
-    price: "12,555 USDT",
-  },
-  {
-    id: 4,
-    image: "https://via.placeholder.com/300x300?text=NFT+4",
-    title: "Monkey rage",
-    creator: "John Doe",
-    price: "12,555 USDT",
-  },
-  {
-    id: 5,
-    image: "https://via.placeholder.com/300x300?text=NFT+5",
-    title: "Monkey rage",
-    creator: "John Doe",
-    price: "12,555 USDT",
-  },
-];
+
+
 const marketplace =[
   {
     name:"Micheal",
@@ -108,38 +73,11 @@ const Marketplace = () => {
           />
         </div>
 
-        {/* NFT Grid */}
-        {/* <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-          {nftData.map((nft) => (
-            <div
-              key={nft.id}
-              className="bg-[#111] p-4 rounded-xl shadow-lg transition hover:shadow-2xl"
-            >
-              <img
-                src={nft.image}
-                alt={nft.title}
-                className="rounded-lg mb-4 w-full h-64 object-cover"
-              />
-              <div className="flex items-center gap-2 mb-1">
-                <span className="font-semibold">{nft.creator}</span>
-                <FaCheckCircle className="text-green-400" />
-              </div>
-              <h2 className="text-xl font-bold">{nft.title}</h2>
-              <p className="text-sm text-gray-400 mb-4">Reserve price</p>
-              <div className="flex items-center justify-between">
-                <span className="text-white font-semibold">{nft.price}</span>
-                <button className="bg-lime-500 text-black font-semibold px-4 py-1 rounded-full hover:bg-lime-400 transition">
-                  Buy
-                </button>
-              </div>
-            </div>
-          ))}
-        </div> */}
+ 
         <div className="flex  w-full justify-center">
         <Card card={marketplace}/>
 </div>
-        {/* Pagination/Nav Controls Placeholder */}
-      {/* Pagination Controls */}
+   
  <div className="mt-14 flex justify-center gap-3 flex-wrap px-4">
       {/* Prev Button */}
       <button
