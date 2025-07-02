@@ -1,7 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Home from "./pages/Home";
 import Profile from "./pages/Profile";
-import Marketplace from "./pages/Marketplace";
 import ConnectWallet from "./pages/Wallet";
 import Footer from "./components/Footer";
 import Dashboard from "./pages/Dashboard";
@@ -12,6 +11,7 @@ import TrendingBids from "./pages/Dashboard/TrendingBids";
 import Saved from "./pages/Dashboard/Saved";
 import Collections from "./pages/Dashboard/Collections";
 import LoginPage from "./components/Login";
+import Marketplace from "./pages/MarketPlace";
 
 
 function AppLayout() {
