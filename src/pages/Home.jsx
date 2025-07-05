@@ -106,7 +106,7 @@ const howItWork = [
 const Home = () => {
   
   return (
-    <div className="">
+    <div className="bg-[#000]">
       <div className=" md:flex relative z-1 flex-col text-center mt-28 md:px-12 justify-center w-full">
         <h1 className="text-white text-[24px] md:text-5xl font-bold">
           UNLOCK . COLLECT
