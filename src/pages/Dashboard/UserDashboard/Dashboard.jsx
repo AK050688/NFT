@@ -1,7 +1,9 @@
 import React from 'react';
-import Sidebar from '../components/Sidebaar';
+import { NavLink } from 'react-router-dom';
+// import Sidebar from '../../../components/Sidebaar';
+import NFTCard from '../../../components/NFTCard';
+import { nftData } from '../../../data/nftData';
 
-import Card from './Card';
 import {
   AreaChart,
   Area,
@@ -11,8 +13,7 @@ import {
   ResponsiveContainer
 } from "recharts";
 import { IoTrendingUpOutline } from 'react-icons/io5';
-import Search from './Dashboard/Search';
-
+import Saved from './Saved';
 const data = [
   { date: "1 May", price: 220 },
   { date: "2 May", price: 140 },
@@ -164,61 +165,54 @@ const marketplace =[
 
 const Dashboard = () => {
   return (
-    <div className="ml-16 min-h-screen   p-6 space-y-10">
-      {/* Top Header */}
-      <Sidebar/>
-      <Search/>
-
-      {/* Trending Collections */}
-      {/* <div>
-        <h2 className="font-bold mb-8 text-center text-4xl m-4">TRENDING COLLECTIONS</h2>
-        <div className="grid grid-cols-3 gap-6">
-          {dummyCollections.map((item, i) => (
-            <div
-              key={i}
-              className="bg-gradient-to-tr from-purple-700 to-indigo-800 p-4 rounded-xl text-center"
-            >
-              <img
-                src={item.img}
-                className="mx-auto w-16 h-16"
-                alt={item.name}
-              />
-              <p className="mt-2 font-semibold">{item.name}</p>
-              <p className="text-green-400 font-bold">{item.status}</p>
-            </div>
-          ))}
-        </div>
-      </div> */}
-
+    <div className="min-h-screen p-6 space-y-10">
+      {/* Minimal Header with Profile link and Dashboard label */}
+      <div className="flex space-x-6 border-b border-purple-700 mb-8">
+        <NavLink
+          to="/profile"
+          className={({ isActive }) =>
+            `pb-2 text-lg font-semibold border-b-2 transition ${
+              isActive ? 'border-[#D54CFF] text-white' : 'border-transparent text-white/70 hover:text-white'
+            }`
+          }
+          end
+        >
+          Profile
+        </NavLink>
+        <span className="pb-2 text-lg font-semibold border-b-2 border-[#D54CFF] text-white">Dashboard</span>
+      </div>
       {/* NFT Grid */}
       <h1 className="font-[500] text-[24px] w-full text-center md:text-[48px]">TRENDING COLLECTION</h1>
-  <Card card={marketplace}/>
-
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+        {nftData.slice(0, 6).map((nft) => (
+          <NFTCard key={nft.id} nft={nft} />
+        ))}
+      </div>
       {/* Ethereum Price Chart Placeholder */}
-          <div className="w-full h-[400px] bg-gradient-to-br from-black via-gray-900 to-black rounded-2xl p-6">
-      <h2 className="text-white text-2xl text-center mb-4 tracking-widest font-semibold">ETHEREUM PRICE</h2>
-      <ResponsiveContainer width="100%" height="100%">
-        <AreaChart data={data}>
-          <defs>
-            <linearGradient id="colorEth" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="5%" stopColor="#c084fc" stopOpacity={0.8} />
-              <stop offset="95%" stopColor="#a855f7" stopOpacity={0.1} />
-            </linearGradient>
-          </defs>
-          <XAxis dataKey="date" tick={{ fill: "#fff" }} />
-          <YAxis tick={{ fill: "#fff" }} domain={[0, 350]} />
-          <Tooltip contentStyle={{ backgroundColor: "#111", border: "none" }} labelStyle={{ color: "#fff" }} itemStyle={{ color: "#fff" }} />
-          <Area
-            type="monotone"
-            dataKey="price"
-            stroke="#a855f7"
-            strokeWidth={3}
-            fillOpacity={1}
-            fill="url(#colorEth)"
-          />
-        </AreaChart>
-      </ResponsiveContainer>
-    </div>
+      <div className="w-full h-[400px] bg-gradient-to-br from-black via-gray-900 to-black rounded-2xl p-6">
+        <h2 className="text-white text-2xl text-center mb-4 tracking-widest font-semibold">ETHEREUM PRICE</h2>
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={data}>
+            <defs>
+              <linearGradient id="colorEth" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="#c084fc" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="#a855f7" stopOpacity={0.1} />
+              </linearGradient>
+            </defs>
+            <XAxis dataKey="date" tick={{ fill: "#fff" }} />
+            <YAxis tick={{ fill: "#fff" }} domain={[0, 350]} />
+            <Tooltip contentStyle={{ backgroundColor: "#111", border: "none" }} labelStyle={{ color: "#fff" }} itemStyle={{ color: "#fff" }} />
+            <Area
+              type="monotone"
+              dataKey="price"
+              stroke="#a855f7"
+              strokeWidth={3}
+              fillOpacity={1}
+              fill="url(#colorEth)"
+            />
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
       {/* Trending Bids */}
       <div>
         <h2 className="text-3xl mt-22 font-semibold mb-4 text-center">TRENDING BIDS</h2>

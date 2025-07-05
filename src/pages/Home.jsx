@@ -1,8 +1,8 @@
 import React from "react";
 import { FaArrowRight } from "react-icons/fa6";
 import { Link } from "react-router-dom";
-import Card from "./Card";
-import CardTwo from "./CardTwo";
+import NFTCard from "../components/NFTCard";
+import { nftData } from "../data/nftData";
 
 const cardData = [
   {
@@ -161,8 +161,12 @@ const Home = () => {
           </h1>
 
           {/*Cards */}
-          <div className=" md:top-10 top-5  relative z-1">
-            <Card card={cardData} />
+          <div className="md:top-10 top-5 relative z-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {nftData.slice(0, 3).map((nft) => (
+                <NFTCard key={nft.id} nft={nft} />
+              ))}
+            </div>
           </div>
         </div>
         <div className="bg top-100 z-0  -left-30"></div>
@@ -188,10 +192,13 @@ const Home = () => {
             ))}
           </ul>
         </div>
-        <div className="flex  w-full justify-center">
-          <div className=" relative w-full m-4 px-12 z-1">
-            <Card card={marketplace} />
-            <CardTwo card={marketplace}/>
+        <div className="flex w-full justify-center">
+          <div className="relative w-full m-4 px-12 z-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {nftData.slice(0, 6).map((nft) => (
+                <NFTCard key={nft.id} nft={nft} />
+              ))}
+            </div>
           </div>
           <div className="bg top-600 z-0 -right-30"></div>
 

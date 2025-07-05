@@ -37,20 +37,21 @@ function LoginPage() {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
-          <input
-            type="password"
-            placeholder="Password"
-            className="w-full px-4 py-2 mb-4 border rounded-xl"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
             <input
             type="text"
             placeholder="email"
             className="w-full px-4 py-2 mb-4 border rounded-xl"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            required
+            autoComplete="email"
+          />
+          <input
+            type="password"
+            placeholder="Password"
+            className="w-full px-4 py-2 mb-4 border rounded-xl"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
             required
           />
           <button

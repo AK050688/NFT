@@ -1,7 +1,6 @@
 import React from 'react'
 import { IoTrendingUpOutline } from 'react-icons/io5';
-import Sidebar from '../../components/Sidebaar';
-
+// import Sidebar from '../../../components/Sidebaar';
 
 const trendingBids = [
   { name: 'Apocalypse Ape', bid: '4.7 ETH', creator: 'ZenMaster' },
@@ -50,7 +49,7 @@ const bids = [
 const TrendingBids = () => {
   return (
     <div>
-        <Sidebar/>
+        {/* <Sidebar/> */}
           <div>
                 <h2 className="text-3xl mt-22 font-semibold mb-4 text-center">TRENDING BIDS</h2>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

@@ -1,6 +1,6 @@
 import React from 'react'
-import Sidebar from '../../components/Sidebaar'
-import Card from '../Card'
+// import Sidebar from '../../../components/Sidebaar'
+import Card from '../../Card'
 
 const marketplace =[
   {
@@ -37,7 +37,7 @@ const marketplace =[
 const Collections = () => {
   return (
     <div className='md:px-24 px-12'>
-        <Sidebar/>
+        {/* <Sidebar/> */}
          <h1 className="font-[500] mt-30 text-[24px] w-full text-center md:text-[48px]">Collections</h1>
   <Card card={marketplace}/>
     </div>

@@ -4,25 +4,32 @@ import { FiMenu, FiX } from "react-icons/fi";
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-    const navigate = useNavigate()
-  
-    const handleNavigate=()=>{
-      navigate('NFTS-login')
-      setMenuOpen(false)
-    }
+  const [loggedIn, setLoggedIn] = useState(false); // simple login state
+  const [username, setUsername] = useState('johndoe'); // example username
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleNavigate = () => {
+    // Simulate login for demo
+    setLoggedIn(true);
+    setMenuOpen(false);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    setDropdownOpen(false);
+  };
 
   const Pages = [
     { name: "HOME", path: "/" },
     { name: "MARKETPLACE", path: "/market-place" },
     { name: "WALLET", path: "/connect" },
-    { name: "PROFILE", path: "/profile" },
   ];
 
   return (
     <header className="w-full  z-50 fixed top-0 bg-transparent">
       <div className="container mx-auto md:flex  justify-center px-4 py-4">
         <nav className="md:bg-[#D54CFF]/60 text-white rounded-full px-6 py-3 shadow-lg backdrop-blur-md flex items-center justify-between relative">
-          
           {/* Logo */}
           <div className="font-bold text-white md:hidden text-xl">NFTX</div>
 
@@ -44,11 +51,27 @@ const NavBar = () => {
             ))}
           </ul>
 
-          {/* Login Button - Visible on Desktop */}
+          {/* Username Dropdown or Login Button - Desktop */}
           <div className="hidden md:ml-6 sm:block">
-            <button onClick={handleNavigate} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
-              Login
-            </button>
+            {loggedIn ? (
+              <div className="relative">
+                <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
+                  {username}
+                </button>
+                {dropdownOpen && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Profile</button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/wallet'); setDropdownOpen(false);}}>Wallet</button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/settings'); setDropdownOpen(false);}}>Settings</button>
+                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>Logout</button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <button onClick={handleNavigate} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
+                Login
+              </button>
+            )}
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -78,9 +101,25 @@ const NavBar = () => {
                   {page.name}
                 </NavLink>
               ))}
-              <button onClick={handleNavigate} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
-                Login
-              </button>
+              {loggedIn ? (
+                <div className="relative">
+                  <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full">
+                    {username}
+                  </button>
+                  {dropdownOpen && (
+                    <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/dashboard'); setDropdownOpen(false);}}>Profile</button>
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/wallet'); setDropdownOpen(false);}}>Wallet</button>
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/settings'); setDropdownOpen(false);}}>Settings</button>
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>Logout</button>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <button onClick={handleNavigate} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
+                  Login
+                </button>
+              )}
             </div>
           )}
         </nav>
