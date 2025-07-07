@@ -1,23 +1,25 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX } from "react-icons/fi";
+import { useSelector, useDispatch } from 'react-redux';
+import { logout } from '../redux/slices/authSlice';
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false); // simple login state
-  const [username, setUsername] = useState('johndoe'); // example username
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const navigate = useNavigate();
-
-  const handleNavigate = () => {
-    // Simulate login for demo
-    setLoggedIn(true);
-    setMenuOpen(false);
-  };
+  const dispatch = useDispatch();
+  const auth = useSelector(state => state.auth);
+  const loggedIn = !!auth.token;
+  const username = auth.user?.userName || auth.user?.firstName || 'User';
+  const isAdmin = auth.user?.userType === 'ADMIN';
 
   const handleLogout = () => {
-    setLoggedIn(false);
+    dispatch(logout());
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setDropdownOpen(false);
+    navigate('/');
   };
 
   const Pages = [
@@ -49,6 +51,16 @@ const NavBar = () => {
                 </NavLink>
               </li>
             ))}
+            {loggedIn && !isAdmin && (
+              <li>
+                <NavLink
+                  to="/mint-nft"
+                  className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition"
+                >
+                  Mint NFT
+                </NavLink>
+              </li>
+            )}
           </ul>
 
           {/* Username Dropdown or Login Button - Desktop */}
@@ -60,7 +72,11 @@ const NavBar = () => {
                 </button>
                 {dropdownOpen && (
                   <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
-                    <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Profile</button>
+                    {isAdmin ? (
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button>
+                    ) : (
+                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Profile</button>
+                    )}
                     <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/wallet'); setDropdownOpen(false);}}>Wallet</button>
                     <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/settings'); setDropdownOpen(false);}}>Settings</button>
                     <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>Logout</button>
@@ -68,7 +84,7 @@ const NavBar = () => {
                 )}
               </div>
             ) : (
-              <button onClick={handleNavigate} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
+              <button onClick={() => navigate('/NFTS-login')} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
                 Login
               </button>
             )}
@@ -101,6 +117,15 @@ const NavBar = () => {
                   {page.name}
                 </NavLink>
               ))}
+              {loggedIn && !isAdmin && (
+                <NavLink
+                  to="/mint-nft"
+                  className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full text-center"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Mint NFT
+                </NavLink>
+              )}
               {loggedIn ? (
                 <div className="relative">
                   <button onClick={() => setDropdownOpen(!dropdownOpen)} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full">
@@ -108,7 +133,11 @@ const NavBar = () => {
                   </button>
                   {dropdownOpen && (
                     <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
-                      <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/dashboard'); setDropdownOpen(false);}}>Profile</button>
+                      {isAdmin ? (
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button>
+                      ) : (
+                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/dashboard'); setDropdownOpen(false);}}>Profile</button>
+                      )}
                       <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/wallet'); setDropdownOpen(false);}}>Wallet</button>
                       <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/settings'); setDropdownOpen(false);}}>Settings</button>
                       <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={handleLogout}>Logout</button>
@@ -116,7 +145,7 @@ const NavBar = () => {
                   )}
                 </div>
               ) : (
-                <button onClick={handleNavigate} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
+                <button onClick={() => navigate('/NFTS-login')} className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition">
                   Login
                 </button>
               )}

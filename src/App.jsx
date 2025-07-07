@@ -26,6 +26,11 @@ import CreateLevel from "./pages/Dashboard/AdminDashboard/CreateLevel";
 import ReferralDetails from "./pages/Dashboard/AdminDashboard/ReferralDetails";
 import ArtistPage from "./pages/ArtistPage";
 import NFTDetail from "./pages/NFTDetail";
+import * as jwt_decode from "jwt-decode";
+import ForgotPassword from './pages/ForgotPassword';
+import OtpVerification from './pages/OtpVerification';
+import ChangePassword from './pages/ChangePassword';
+import MintNFT from './pages/MintNFT';
 
 function AppLayout() {
   const location = useLocation();
@@ -41,6 +46,11 @@ function AppLayout() {
       <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/NFTS-login" element={<LoginPage />} />
+          <Route path="/NFTS-signup" element={<Signup/>} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/otp-verification" element={<OtpVerification />} />
+          <Route path="/change-password" element={<ChangePassword />} />
           <Route path="/profile" element={<Profile />}>
             <Route index element={<UserDashboardHome />} />
             <Route path="dashboard" element={<ProfileDashboard/>} />
@@ -49,13 +59,6 @@ function AppLayout() {
             <Route path="collections" element={<Collections />} />
             <Route path="search" element={<Search />} />
           </Route>
-          <Route path="/market-place" element={<Marketplace />} />
-          <Route path="/nft/:id" element={<NFTDetail />} />
-          <Route path="/artist/:id" element={<ArtistPage />} />
-          <Route path="/connect" element={<ConnectWallet />} />
-          <Route path="/connected-wallet" element={<WalletConnected />} />
-          <Route path="/NFTS-login" element={<LoginPage />} />
-          <Route path="/NFTS-signup" element={<Signup/>} />
           <Route path="/admin" element={<AdminDashboardLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="users" element={<UserDetails />} />
@@ -67,6 +70,12 @@ function AppLayout() {
             <Route path="referral-details" element={<ReferralDetails />} />
             <Route index element={<AdminDashboard />} />
           </Route>
+          <Route path="/market-place" element={<Marketplace />} />
+          <Route path="/nft/:id" element={<NFTDetail />} />
+          <Route path="/artist/:id" element={<ArtistPage />} />
+          <Route path="/connect" element={<ConnectWallet />} />
+          <Route path="/connected-wallet" element={<WalletConnected />} />
+          <Route path="/mint-nft" element={<MintNFT />} />
         </Routes>
       </main>
 

@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 function Signup() {
   const [form, setForm] = useState({
@@ -17,15 +20,30 @@ function Signup() {
     dateOfBirth: '',
   });
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = e => {
     setForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSignup = e => {
+  const handleSignup = async e => {
     e.preventDefault();
-    setMessage('Signup successful! (Test mode)');
+    setLoading(true);
+    setMessage('');
+    try {
+      const res = await axios.post(`${API_BASE_URL}/user/userSignup`, form);
+      const data = res.data;
+      if (res.status === 200 && data.responseCode === 200) {
+        setMessage('Signup successful! Redirecting to login...');
+        setTimeout(() => navigate('/NFTS-login'), 1500);
+      } else {
+        setMessage(data.responseMessage || 'Signup failed.');
+      }
+    } catch (err) {
+      setMessage(err.response?.data?.responseMessage || 'Network error. Please try again.');
+    }
+    setLoading(false);
   };
 
   return (
@@ -45,8 +63,9 @@ function Signup() {
           <input name="zipCode" type="text" placeholder="Zip Code" className="w-full px-4 py-2 mb-2 border rounded-xl" value={form.zipCode} onChange={handleChange} />
           <input name="countryCode" type="text" placeholder="Country Code" className="w-full px-4 py-2 mb-2 border rounded-xl" value={form.countryCode} onChange={handleChange} />
           <input name="dateOfBirth" type="date" placeholder="Date of Birth" className="w-full px-4 py-2 mb-2 border rounded-xl" value={form.dateOfBirth} onChange={handleChange} />
-          <button type="submit" className="w-full bg-blue-500 cursor-pointer text-white py-2 rounded hover:bg-blue-600 mt-2">Sign Up</button>
+          <button type="submit" className="w-full bg-blue-500 cursor-pointer text-white py-2 rounded hover:bg-blue-600 mt-2" disabled={loading}>{loading ? 'Signing Up...' : 'Sign Up'}</button>
         </form>
+        <button className="w-full bg-gray-200 text-blue-700 py-2 rounded mt-2" onClick={() => navigate('/NFTS-login')}>Already have an account? Login</button>
         {message && <p className="mt-4 text-center text-sm text-red-500">{message}</p>}
       </div>
     </div>

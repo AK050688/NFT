@@ -2,7 +2,6 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 // import Sidebar from '../../../components/Sidebaar';
 import NFTCard from '../../../components/NFTCard';
-import { nftData } from '../../../data/nftData';
 
 import {
   AreaChart,
@@ -96,39 +95,76 @@ const bids = [
 const nftData = [
   {
     id: 1,
-    image: "https://via.placeholder.com/300x300?text=NFT+1",
-    title: "Monkey rage",
+    name: "Monkey rage",
     creator: "Micheal",
+    creatorAvatar: "/Images/profile.png",
     price: "12,555 USDT",
+    likes: 128,
+    views: 1.2,
+    image: "/Images/card4.png",
+    status: "available",
+    rarity: "rare"
   },
   {
     id: 2,
-    image: "https://via.placeholder.com/300x300?text=NFT+2",
-    title: "Monkey rage",
+    name: "Monkey rage",
     creator: "Micheal",
+    creatorAvatar: "/Images/profile1.png",
     price: "12,555 USDT",
+    likes: 89,
+    views: 0.8,
+    image: "/Images/card-5.jpg",
+    status: "available",
+    rarity: "epic"
   },
   {
     id: 3,
-    image: "https://via.placeholder.com/300x300?text=NFT+3",
-    title: "Monkey rage",
+    name: "Monkey rage",
     creator: "Micheal",
+    creatorAvatar: "/Images/profile2.png",
     price: "12,555 USDT",
+    likes: 256,
+    views: 2.1,
+    image: "/Images/card6.jpg",
+    status: "available",
+    rarity: "legendary"
   },
   {
     id: 4,
-    image: "https://via.placeholder.com/300x300?text=NFT+4",
-    title: "Monkey rage",
+    name: "Monkey rage",
     creator: "John Doe",
+    creatorAvatar: "/Images/profile.png",
     price: "12,555 USDT",
+    likes: 167,
+    views: 1.5,
+    image: "/Images/card7.png",
+    status: "available",
+    rarity: "rare"
   },
   {
     id: 5,
-    image: "https://via.placeholder.com/300x300?text=NFT+5",
-    title: "Monkey rage",
+    name: "Monkey rage",
     creator: "John Doe",
+    creatorAvatar: "/Images/profile1.png",
     price: "12,555 USDT",
+    likes: 94,
+    views: 0.9,
+    image: "/Images/card8.png",
+    status: "available",
+    rarity: "epic"
   },
+  {
+    id: 6,
+    name: "Monkey rage",
+    creator: "John Doe",
+    creatorAvatar: "/Images/profile2.png",
+    price: "12,555 USDT",
+    likes: 203,
+    views: 1.8,
+    image: "/Images/card9.png",
+    status: "available",
+    rarity: "rare"
+  }
 ];
 const marketplace =[
   {

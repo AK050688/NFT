@@ -24,7 +24,6 @@ const NFTCard = ({ nft, variant = 'default' }) => {
   const handleLike = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    // TODO: Implement like functionality
     console.log('Like clicked for NFT:', id);
   };
 
