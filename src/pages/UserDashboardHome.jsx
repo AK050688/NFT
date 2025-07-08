@@ -15,8 +15,8 @@ const transactions = [
 ];
 
 const wallets = [
-  { name: "METAMASK", address: "0x093f91n", balance: "2.4356 ETH" },
-  { name: "WALLET CONNECT", address: "0x093f91n", balance: "2.4356 ETH" },
+  { name: "METAMASK", walletAddress: "0x093f91n", balance: "2.4356 ETH" },
+  { name: "WALLET CONNECT", walletAddress: "0x093f91n", balance: "2.4356 ETH" },
 ];
 
 export default function UserDashboardHome() {
@@ -93,7 +93,7 @@ export default function UserDashboardHome() {
               <div className="">
                 <div className="flex flex-col">
                   <p className="text-sm text-white font-semibold">{wallet.name}</p>
-                  <p className="text-xs text-gray-400">{wallet.address}</p>
+                  <p className="text-xs text-gray-400">{wallet.walletAddress}</p>
                 </div>
                 <p className="text-sm font-bold text-white">{wallet.balance}</p>
               </div>

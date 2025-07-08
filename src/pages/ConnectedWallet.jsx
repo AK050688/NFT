@@ -3,10 +3,18 @@ import { LuCopy } from "react-icons/lu";
 import { IoMdExit } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { disconnectWallet } from "../redux/slices/nftSlice";
+import { useNavigate } from 'react-router-dom';
 
 const WalletConnected = () => {
-  const { address, balance, walletType } = useSelector((state) => state.wallet);
+  const { walletAddress, balance, walletType } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleDisconnect = () => {
+    dispatch(disconnectWallet());
+    alert('Wallet disconnected successfully.');
+    navigate('/wallet'); // Redirect to wallet connection page
+  };
 
   return (<div className="">
         <div className="bg -top-50 -left-30"></div>
@@ -27,7 +35,7 @@ const WalletConnected = () => {
         <div className="bg-[#FFFFFF33] mt-12 rounded-2xl p-3 justify-between mb-3 w-full flex text-sm">
           <div className=" flex-col font-popo flex">
             <span className="p-2 pl-4">Wallet Address</span>
-            <span className="text-gray-300 p-2 pl-0">{address}</span>
+            <span className="text-gray-300 p-2 pl-0">{walletAddress}</span>
           </div>
           <div className="flex items-center gap-">
             <button className="text-white text-3xl">
@@ -49,7 +57,7 @@ const WalletConnected = () => {
         </div>
         <div className="flex gap-4 items-center justify-center">
           <button
-            onClick={() => dispatch(disconnectWallet())}
+            onClick={handleDisconnect}
             className="bg-[#FFFFFF33] cursor-pointer justify-center flex items-center gap-4 hover:bg-red-500 text-white py-2 px-4 rounded-2xl  font-popo text-sm w-[40%]  "
           >
             Disconnect Wallet <IoMdExit className="text-3xl" />

@@ -31,6 +31,9 @@ import ForgotPassword from './pages/ForgotPassword';
 import OtpVerification from './pages/OtpVerification';
 import ChangePassword from './pages/ChangePassword';
 import MintNFT from './pages/MintNFT';
+import NFTGenerator from './pages/NFTGenerator';
+import Contact from './pages/Contact';
+import RotatingStone from './pages/RotatingStone';
 
 function AppLayout() {
   const location = useLocation();
@@ -76,6 +79,10 @@ function AppLayout() {
           <Route path="/connect" element={<ConnectWallet />} />
           <Route path="/connected-wallet" element={<WalletConnected />} />
           <Route path="/mint-nft" element={<MintNFT />} />
+          <Route path="/generate-nft" element={<NFTGenerator />} />
+          <Route path="/wallet" element={<WalletConnected />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/rotating-stone" element={<RotatingStone />} />
         </Routes>
       </main>
 
