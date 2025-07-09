@@ -28,20 +28,20 @@ export default function Transactions() {
   );
 
   return (
-    <div className="bg-black min-h-screen pt-24 p-2 sm:p-6 w-full">
-      <div className="bg-[#181818] rounded-xl p-4 sm:p-8 text-white shadow-md w-full">
-        <h2 className="text-2xl font-bold mb-6">Transactions</h2>
+    <div className="bg-black min-h-screen pt-16 sm:pt-24 p-2 sm:p-6 w-full">
+      <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md w-full flex flex-col min-h-screen">
+        <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Transactions</h2>
         {/* Search & Filters */}
-        <div className="flex flex-col md:flex-row gap-4 mb-6">
+        <div className="flex flex-col md:flex-row gap-2 md:gap-4 mb-4 sm:mb-6">
           <input
             type="text"
             placeholder="Search by user, NFT, or ID..."
-            className="bg-[#232046] text-white px-4 py-2 rounded-md w-full md:w-1/2 focus:outline-none"
+            className="bg-[#232046] text-white px-3 py-2 rounded-md w-full md:w-1/2 focus:outline-none text-xs sm:text-sm"
             value={search}
             onChange={e => setSearch(e.target.value)}
           />
           <select
-            className="bg-[#232046] text-white px-4 py-2 rounded-md focus:outline-none"
+            className="bg-[#232046] text-white px-3 py-2 rounded-md focus:outline-none text-xs sm:text-sm"
             value={typeFilter}
             onChange={e => setTypeFilter(e.target.value)}
           >
@@ -50,7 +50,7 @@ export default function Transactions() {
             <option value="Sell">Sell</option>
           </select>
           <select
-            className="bg-[#232046] text-white px-4 py-2 rounded-md focus:outline-none"
+            className="bg-[#232046] text-white px-3 py-2 rounded-md focus:outline-none text-xs sm:text-sm"
             value={statusFilter}
             onChange={e => setStatusFilter(e.target.value)}
           >
@@ -61,17 +61,18 @@ export default function Transactions() {
           </select>
         </div>
         {/* Transactions Table */}
-        <div className="overflow-x-auto">
+        {/* Table view for sm and up */}
+        <div className="overflow-x-auto hidden sm:block flex-1">
           <table className="min-w-full text-left text-xs sm:text-sm">
             <thead>
               <tr className="border-b border-[#232046]">
-                <th className="py-2 px-4">ID</th>
-                <th className="py-2 px-4">User</th>
-                <th className="py-2 px-4">NFT</th>
-                <th className="py-2 px-4">Type</th>
-                <th className="py-2 px-4">Amount</th>
-                <th className="py-2 px-4">Date</th>
-                <th className="py-2 px-4">Status</th>
+                <th className="py-2 px-2 sm:px-4">ID</th>
+                <th className="py-2 px-2 sm:px-4">User</th>
+                <th className="py-2 px-2 sm:px-4">NFT</th>
+                <th className="py-2 px-2 sm:px-4">Type</th>
+                <th className="py-2 px-2 sm:px-4">Amount</th>
+                <th className="py-2 px-2 sm:px-4">Date</th>
+                <th className="py-2 px-2 sm:px-4">Status</th>
               </tr>
             </thead>
             <tbody>
@@ -82,18 +83,36 @@ export default function Transactions() {
               ) : (
                 filtered.map((tx, idx) => (
                   <tr key={idx} className="border-b border-[#232046] hover:bg-[#232046] transition">
-                    <td className="py-2 px-4">{tx.id}</td>
-                    <td className="py-2 px-4">{tx.user}</td>
-                    <td className="py-2 px-4">{tx.nft}</td>
-                    <td className="py-2 px-4">{tx.type}</td>
-                    <td className="py-2 px-4">{tx.amount}</td>
-                    <td className="py-2 px-4">{tx.date}</td>
-                    <td className={`py-2 px-4 font-bold ${statusColors[tx.status]}`}>{tx.status}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.id}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.user}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.nft}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.type}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.amount}</td>
+                    <td className="py-2 px-2 sm:px-4">{tx.date}</td>
+                    <td className={`py-2 px-2 sm:px-4 font-bold ${statusColors[tx.status]}`}>{tx.status}</td>
                   </tr>
                 ))
               )}
             </tbody>
           </table>
+        </div>
+        {/* Card view for mobile */}
+        <div className="block sm:hidden space-y-4 flex-1">
+          {filtered.length === 0 ? (
+            <div className="text-center py-6 text-gray-400">No transactions found.</div>
+          ) : (
+            filtered.map((tx, idx) => (
+              <div key={idx} className="bg-[#232046] rounded-lg p-4 shadow flex flex-col gap-2">
+                <div><span className="font-bold">ID:</span> {tx.id}</div>
+                <div><span className="font-bold">User:</span> {tx.user}</div>
+                <div><span className="font-bold">NFT:</span> {tx.nft}</div>
+                <div><span className="font-bold">Type:</span> {tx.type}</div>
+                <div><span className="font-bold">Amount:</span> {tx.amount}</div>
+                <div><span className="font-bold">Date:</span> {tx.date}</div>
+                <div><span className="font-bold">Status:</span> <span className={`font-bold ${statusColors[tx.status]}`}>{tx.status}</span></div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </div>

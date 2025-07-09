@@ -241,12 +241,12 @@ const Home = () => {
       <div className="bg top-80 z-10 -right-60"></div>
 
       <div className="bgone"></div>
-      <div className="flex  relative z-20 -top-110  justify-center ">
-        <div className=" w-full  md:w-[1122px] h-[721px]">
+      {/* Trending Collections Section */}
+      <div className="flex relative z-20 justify-center mt-8 md:-top-110">
+        <div className="w-full md:w-[1122px] md:h-[721px]">
           <h1 className="w-full text-center md:text-2xl text-[24px] h-[80px] text-white">
             TRENDING COLLECTIONS
           </h1>
-
           {/*Cards */}
           <div className="md:top-10 top-5 relative z-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -256,18 +256,18 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div className="bg top-100 z-0  -left-30"></div>
+        <div className="bg md:top-100 z-0 -left-30"></div>
       </div>
-      <div className="md:flex relative -top-100 w-full justify-center text-center items-center mt-0 md:m-0">
+      <div className="md:flex relative w-full justify-center text-center items-center mt-8 md:-top-100">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
-      <div className="mt-8 md:mt-0 relative -top-90">
+      {/* Marketplace Section */}
+      <div className="mt-8 md:mt-0 relative md:-top-90">
         <h1 className="text-[20px] md:text-[64px] font-[500] w-full text-center">
           EXPLORE MARKETPLACE
         </h1>
-
         <div className="md:w-[1045] md:h-[40px] mt-20">
           <ul className="hidden md:flex justify-between px-32 w-full ">
             {listData.map((list, index) => (
@@ -280,33 +280,28 @@ const Home = () => {
           </ul>
         </div>
         <div className="flex w-full justify-center">
-          <div className="relative w-full m-4 px-12 z-1">
+          <div className="relative w-full m-4 px-4 sm:px-12 z-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {nftData.slice(0, 6).map((nft) => (
                 <NFTCard key={nft.id} nft={nft} />
               ))}
             </div>
           </div>
-          <div className="bg top-600 z-0 -right-30"></div>
+          <div className="bg md:top-600 z-0 -right-30"></div>
         </div>
       </div>
-      <div className="flex relative -top-70 w-full justify-center text-center items-center ">
+      <div className="flex relative w-full justify-center text-center items-center mt-8 md:-top-70">
         <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
           View More
         </button>
       </div>
-
-      <div className="relative -top-55">
+      {/* How It Works Section */}
+      <div className="relative mt-8 md:-top-55">
         <p className="font-[500] text-[20px] md:text-[64px] w-full text-center">
           HOW IT WORKS
         </p>
       </div>
-      <div className="bg top-800 -left-30"></div>
-      <div className="bg top-1000 -left-30"></div>
-
-      <div className="bg top-1000 -right-30"></div>
-
-      <div className="px-6 md:px-32 relative -top-50 z-1 flex flex-col gap-6 ">
+      <div className="px-6 md:px-32 relative mt-8 md:-top-50 z-1 flex flex-col gap-6 ">
         {howItWork.map((data, index) => (
           <div
             key={index}

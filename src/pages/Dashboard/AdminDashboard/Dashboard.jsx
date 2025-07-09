@@ -84,22 +84,22 @@ const bids = [
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen p-6 space-y-10 bg-black">
+    <div className="min-h-screen p-2 sm:p-4 md:p-6 space-y-6 sm:space-y-10 bg-black">
       {/* Dashboard Title */}
-      <h1 className="text-3xl md:text-4xl font-bold text-white mb-8 tracking-tight">Admin Dashboard</h1>
+      <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-8 tracking-tight">Admin Dashboard</h1>
       {/* Top Metrics Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 gap-y-6 mb-10">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 gap-y-6 mb-6 sm:mb-10">
         {metrics.map((metric, idx) => (
-          <div key={idx} className="bg-[#181818] rounded-2xl p-6 flex flex-col items-start shadow-md min-w-0 flex-1">
+          <div key={idx} className="bg-[#181818] rounded-2xl p-4 sm:p-6 flex flex-col items-start shadow-md min-w-0 flex-1">
             <div className="flex items-center gap-2 mb-2">{metric.icon}<span className="text-lg font-semibold text-white ml-2">{metric.label}</span></div>
             <div className="text-2xl font-bold text-white mt-2">{metric.value}</div>
           </div>
         ))}
       </div>
       {/* Main Chart */}
-      <div className="bg-[#181818] rounded-2xl p-6 shadow-md mb-10">
-        <h2 className="text-xl font-bold text-white mb-4">NFT Sales & Bids</h2>
-        <ResponsiveContainer width="100%" height={300}>
+      <div className="bg-[#181818] rounded-2xl p-4 sm:p-6 shadow-md mb-6 sm:mb-10">
+        <h2 className="text-lg sm:text-xl font-bold text-white mb-2 sm:mb-4">NFT Sales & Bids</h2>
+        <ResponsiveContainer width="100%" height={220} minHeight={180} className="sm:h-[300px]">
           <BarChart data={barData} margin={{ top: 10, right: 30, left: 0, bottom: 0 }}>
             <XAxis dataKey="date" stroke="#fff" />
             <YAxis stroke="#fff" />
@@ -110,17 +110,17 @@ export default function AdminDashboard() {
         </ResponsiveContainer>
       </div>
       {/* Analytics Section */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-8 mb-6 sm:mb-10">
         {/* Donut Chart */}
-        <div className="bg-[#181818] rounded-2xl p-6 shadow-md flex flex-col items-center">
-          <h3 className="text-lg font-bold text-white mb-4">Sales by NFT Category</h3>
-          <PieChart width={220} height={220}>
+        <div className="bg-[#181818] rounded-2xl p-4 sm:p-6 shadow-md flex flex-col items-center">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-2 sm:mb-4">Sales by NFT Category</h3>
+          <PieChart width={180} height={180} className="sm:w-[220px] sm:h-[220px]">
             <Pie
               data={donutData}
               cx="50%"
               cy="50%"
-              innerRadius={60}
-              outerRadius={90}
+              innerRadius={40}
+              outerRadius={70}
               paddingAngle={3}
               dataKey="value"
               stroke="none"
@@ -130,7 +130,7 @@ export default function AdminDashboard() {
               ))}
             </Pie>
           </PieChart>
-          <ul className="mt-4 space-y-1 text-sm text-white">
+          <ul className="mt-2 sm:mt-4 space-y-1 text-xs sm:text-sm text-white">
             {donutData.map((entry, idx) => (
               <li key={idx} className="flex items-center gap-2">
                 <span className="inline-block w-3 h-3 rounded-full" style={{ background: donutColors[idx % donutColors.length] }}></span>
@@ -140,9 +140,9 @@ export default function AdminDashboard() {
           </ul>
         </div>
         {/* Country Analytics */}
-        <div className="bg-[#181818] rounded-2xl p-6 shadow-md">
-          <h3 className="text-lg font-bold text-white mb-4">Top Countries</h3>
-          <ul className="space-y-2 text-white">
+        <div className="bg-[#181818] rounded-2xl p-4 sm:p-6 shadow-md">
+          <h3 className="text-base sm:text-lg font-bold text-white mb-2 sm:mb-4">Top Countries</h3>
+          <ul className="space-y-2 text-white text-xs sm:text-sm">
             {countryData.map((c, idx) => (
               <li key={idx} className="flex justify-between items-center border-b border-[#232046] pb-2 last:border-b-0">
                 <span>{c.country}</span>
@@ -153,11 +153,11 @@ export default function AdminDashboard() {
         </div>
       </div>
        {/*Recent Bids*/}
-       <h2 className="text-white text-xl sm:text-2xl font-semibold text-center mb-6 sm:mb-8 tracking-wider">
+       <h2 className="text-white text-lg sm:text-xl md:text-2xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 tracking-wider">
         RECENT BIDS
       </h2>
       {/* Table Headers - Only visible on medium and up */}
-      <div className="hidden md:grid grid-cols-5 text-white text-sm mb-4 px-2 sm:px-6">
+      <div className="hidden md:grid grid-cols-5 text-white text-xs sm:text-sm mb-2 sm:mb-4 px-2 sm:px-6">
         <p className="col-span-1">Item List</p>
         <p className="text-center">Open Price</p>
         <p className="text-center">Your Offer</p>
@@ -165,27 +165,27 @@ export default function AdminDashboard() {
         <p className="text-right">Time Left</p>
       </div>
       {/* Bid Items */}
-      <div className="space-y-4">
+      <div className="space-y-2 sm:space-y-4">
         {bids.map((bid) => (
           <div
             key={bid.id}
-            className="bg-[#FFFFFF1A] rounded-2xl px-4 sm:px-6 py-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg text-white text-sm"
+            className="bg-[#FFFFFF1A] rounded-2xl px-2 sm:px-4 md:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg text-white text-xs sm:text-sm"
           >
             {/* Item Info */}
-            <div className="flex items-center gap-3 md:w-1/5 mb-3 md:mb-0">
+            <div className="flex items-center gap-2 sm:gap-3 md:w-1/5 mb-2 md:mb-0">
               <img
                 src={bid.image}
                 alt={bid.title}
-                className="w-12 h-12 rounded-full object-cover"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
               />
               <div>
                 <p className="font-semibold">{bid.title}</p>
-                <p className="text-gray-400 text-xs">{bid.user}</p>
+                <p className="text-gray-400 text-[10px] sm:text-xs">{bid.user}</p>
               </div>
             </div>
 
             {/* Labels and Values */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between w-full md:w-4/5 gap-2 md:gap-0">
+            <div className="flex flex-col md:flex-row md:items-center justify-between w-full md:w-4/5 gap-1 md:gap-0">
               <div className="md:w-1/4 text-center md:text-left">
                 <span className="md:hidden text-gray-400">Open Price: </span>
                 {bid.price}
@@ -205,7 +205,7 @@ export default function AdminDashboard() {
             </div>
           </div>
         ))}
-    </div>
+      </div>
     </div>
   );
 } 

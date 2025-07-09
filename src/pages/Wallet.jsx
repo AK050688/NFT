@@ -12,7 +12,8 @@ const wallets = [
   { name: 'COINBASE WALLET', icon: '/coinbase.png' ,img:"/Images/walletImg2.png"},
 ];
 
-const ConnectWallet = () => {
+
+  const ConnectWallet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -73,7 +74,6 @@ const ConnectWallet = () => {
       navigate('/connected-wallet');
     }
   };
-
   return (
     <div className="min-h-screen flex items-center justify-center  text-white px-4">
       <div className="bg-[#FFFFFF1A] rounded-xl p-6 max-w-md w-full shadow-xl">

@@ -4,6 +4,8 @@ import axios from 'axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
+console.log(API_BASE_URL)
+
 function Signup() {
   const [form, setForm] = useState({
     firstName: '',
@@ -32,7 +34,7 @@ function Signup() {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.post(`${API_BASE_URL}/user/userSignup`, form);
+      const res = await axios.post(`${API_BASE_URL}/user/userSignup`,form);
       const data = res.data;
       if (res.status === 200 && data.responseCode === 200) {
         setMessage('Signup successful! Redirecting to login...');
