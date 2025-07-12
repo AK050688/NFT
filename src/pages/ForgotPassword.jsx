@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -15,7 +15,7 @@ const ForgotPassword = () => {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.post(`${API_BASE_URL}/user/forgotPassword`, { email });
+      const res = await api.post('/user/forgotPassword', { email });
       const data = res.data;
       if (res.status === 200 && data.responseCode === 200) {
         setMessage('OTP sent successfully!');

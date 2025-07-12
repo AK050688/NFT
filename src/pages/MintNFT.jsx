@@ -1,123 +1,66 @@
 import React, { useState } from 'react';
+import { mintNFT } from '../api/nft';
 
 const MintNFT = () => {
   const [form, setForm] = useState({
     name: '',
-    description: '',
-    category: '',
-    price: '',
-    image: null,
-    imagePreview: null,
+    imageUrl: '',
+    royalty: '',
+    traits: { luck: '', intelligence: '', strength: '' },
+    tokenId: '',
   });
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'image') {
-      const file = files[0];
-      setForm({
-        ...form,
-        image: file,
-        imagePreview: file ? URL.createObjectURL(file) : null,
-      });
+    const { name, value } = e.target;
+    if (["luck", "intelligence", "strength"].includes(name)) {
+      setForm((prev) => ({
+        ...prev,
+        traits: { ...prev.traits, [name]: value }
+      }));
     } else {
-      setForm({ ...form, [name]: value });
+      setForm((prev) => ({ ...prev, [name]: value }));
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setMessage('');
-    // TODO: Integrate with backend or smart contract
-    setTimeout(() => {
-      setLoading(false);
-      setMessage('NFT minted (mock)!');
-    }, 1200);
+    try {
+      const payload = {
+        ...form,
+        royalty: Number(form.royalty),
+        traits: {
+          luck: Number(form.traits.luck),
+          intelligence: Number(form.traits.intelligence),
+          strength: Number(form.traits.strength),
+        }
+      };
+      await mintNFT(payload);
+      setMessage('NFT created successfully!');
+    } catch (err) {
+      setMessage('Failed to create NFT.');
+    }
+    setLoading(false);
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center ">
-      <div className="p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Mint New NFT</h2>
-        <form onSubmit={handleSubmit}>
-          <label className="block mb-2 font-semibold">NFT Image</label>
-          <input
-            type="file"
-            name="image"
-            accept="image/*"
-            onChange={handleChange}
-            className="mb-4 w-full"
-            required
-          />
-          {form.imagePreview && (
-            <img src={form.imagePreview} alt="Preview" className="mb-4 w-full h-48 object-cover rounded-xl border" />
-          )}
-          <label htmlFor="name" className="block mb-1 font-semibold">NFT Name</label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            placeholder="NFT Name"
-            value={form.name}
-            onChange={handleChange}
-            className="w-full px-4 py-2 mb-3 border rounded-xl"
-            required
-          />
-          <label htmlFor="description" className="block mb-1 font-semibold">Description</label>
-          <textarea
-            id="description"
-            name="description"
-            placeholder="Description"
-            value={form.description}
-            onChange={handleChange}
-            className="w-full px-4 py-2 mb-3 border rounded-xl"
-            required
-          />
-          <label htmlFor="category" className="block mb-1 font-semibold">Category</label>
-          <select
-            id="category"
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-            className="w-full px-4 py-2 mb-3 border bg-black rounded-xl"
-            required
-          >
-            <option value="">Select Category</option>
-            <option value="Art">Art</option>
-            <option value="Music">Music</option>
-            <option value="Photography">Photography</option>
-            <option value="Games">Games</option>
-            <option value="Collectibles">Collectibles</option>
-            <option value="Other">Other</option>
-          </select>
-          <label htmlFor="price" className="block mb-1 font-semibold">Price (ETH)</label>
-          <input
-            id="price"
-            name="price"
-            type="number"
-            placeholder="Price in ETH"
-            value={form.price}
-            onChange={handleChange}
-            className="w-full px-4 py-2 mb-3 border rounded-xl"
-            min="0"
-            step="0.01"
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-[#D54CFF] hover:bg-[#d54cffd7] text-white py-2 rounded  mt-2"
-            disabled={loading}
-          >
-            {loading ? 'Minting...' : 'Mint NFT'}
-          </button>
-        </form>
-        {message && (
-          <p className="mt-4 text-center text-sm text-green-600">{message}</p>
-        )}
-      </div>
-    </div>
+    <form onSubmit={handleSubmit} className="max-w-md mx-auto p-6 bg-[#181818] rounded-xl shadow-md mt-10 text-white space-y-4">
+      <h2 className="text-2xl font-bold mb-4">Mint New NFT</h2>
+      <input name="name" value={form.name} onChange={handleChange} placeholder="Name" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="imageUrl" value={form.imageUrl} onChange={handleChange} placeholder="Image URL" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="royalty" value={form.royalty} onChange={handleChange} placeholder="Royalty" type="number" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="tokenId" value={form.tokenId} onChange={handleChange} placeholder="Token ID" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="luck" value={form.traits.luck} onChange={handleChange} placeholder="Luck" type="number" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="intelligence" value={form.traits.intelligence} onChange={handleChange} placeholder="Intelligence" type="number" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <input name="strength" value={form.traits.strength} onChange={handleChange} placeholder="Strength" type="number" className="w-full p-2 rounded bg-[#232046] mb-2" />
+      <button type="submit" disabled={loading} className="w-full bg-[#D54CFF] hover:bg-[#c043e8] text-white font-semibold py-2 rounded transition">
+        {loading ? 'Minting...' : 'Mint NFT'}
+      </button>
+      {message && <div className="mt-4 text-center text-sm" style={{ color: message.includes('success') ? '#22c55e' : '#ef4444' }}>{message}</div>}
+    </form>
   );
 };
 

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../api/axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -35,7 +35,7 @@ const ChangePassword = () => {
     }
     setLoading(true);
     try {
-      const res = await axios.put(`${API_BASE_URL}/user/passwordChange`, { email, password, confirmNewPassword });
+      const res = await api.put('/user/passwordChange', { email, password, confirmNewPassword });
       const data = res.data;
       if (res.status === 200 && data.responseCode === 200) {
         setMessage('Password changed successfully!');

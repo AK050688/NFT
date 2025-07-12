@@ -103,7 +103,11 @@ const NavBar = () => {
                 )}
               </div>
             ) : (
-              <button onClick={() => navigate('/NFTS-login')} className="bg-[#D54CFF] text-white font-semibold px-6 py-2 shadow-md hover:bg-[#c043e8] transition">
+              <button
+                onClick={() => navigate('/NFTS-login')}
+                className="transition font-medium text-white/70 hover:text-white px-2"
+                style={{ fontFamily: 'inherit', fontSize: 'inherit' }}
+              >
                 Login
               </button>
             )}
@@ -182,7 +186,11 @@ const NavBar = () => {
                   )}
                 </div>
               ) : (
-                <button onClick={() => navigate('/NFTS-login')} className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition w-full">
+                <button
+                  onClick={() => navigate('/NFTS-login')}
+                  className="transition font-medium text-white/70 hover:text-white px-2 w-full text-left"
+                  style={{ fontFamily: 'inherit', fontSize: 'inherit' }}
+                >
                   Login
                 </button>
               )}

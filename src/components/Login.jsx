@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { loginSuccess } from '../redux/slices/authSlice';
+import { login, adminLogin } from '../api/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -21,29 +21,39 @@ function LoginPage() {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.post(`${API_BASE_URL}/user/userLogin`, { email, password });
-      const data = res.data;
-      if (res.status === 200 && data.responseCode === 200) {
+      let data;
+      
+      // Check if this is an admin login
+      if (email === 'admin@gmail.com' && password === 'admin@123') {
+        // Use admin login API
+        data = await adminLogin({ email, password });
+      } else {
+        // Use regular user login API
+        data = await login({ email, password });
+      }
+      
+      if (data.responseCode === 200) {
         localStorage.setItem('token', data.result.token);
+        console.log(data.result.token)
         localStorage.setItem('user', JSON.stringify(data.result));
         dispatch(loginSuccess({ token: data.result.token, user: data.result }));
         setMessage('Login Successful! Redirecting...');
         setLoading(false);
-        // Direct admin check
+        
+        // Redirect based on user type
         if (email === 'admin@gmail.com' && password === 'admin@123') {
           navigate('/admin/dashboard');
         } else if (data.result.userType === 'ADMIN') {
-          navigate('/admin');
+          navigate('/admin/dashboard');
         } else {
           navigate('/profile');
         }
         return;
-      } else {bg-purple-500
+      } else {
         setMessage(data.responseMessage || 'Login Failed');
       }
     } catch (err) {
-      console.error('Login error:', err, err?.response);
-      setMessage(err.response?.data?.responseMessage || 'Network error. Please try again.');
+      setMessage(err?.responseMessage || 'Network error. Please try again.');
     }
     setLoading(false);
   };

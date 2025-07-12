@@ -1,10 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoIosSend } from "react-icons/io";
 import { connectWallet } from '../redux/slices/nftSlice';
 import { useNavigate } from 'react-router-dom';
 import { BrowserProvider, formatEther } from 'ethers';
-import axios from 'axios';
+import api from '../api/axios';
 
 const wallets = [
   { name: 'METAMASK', icon: '/metamask.png' ,img:"/Images/walletImg.png"},
@@ -16,6 +16,13 @@ const wallets = [
   const ConnectWallet = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const wallet = useSelector(state => state.wallet);
+
+  React.useEffect(() => {
+    if (wallet.connected && wallet.walletAddress) {
+      navigate('/connected-wallet');
+    }
+  }, [wallet, navigate]);
 
   const handleConnect = async (wallet) => {
     if (wallet.name === 'METAMASK') {
@@ -35,15 +42,9 @@ const wallets = [
             })
           );
           try {
-            const token = localStorage.getItem('token');
-            await axios.put(
-              'https://7wvxgkc8-5000.inc1.devtunnels.ms/api/v1/user/walletConnect',
-              { walletAddress: address},
-              {
-                headers: {
-                  Authorization: `${token}`,
-                },
-              }
+            await api.put(
+              '/user/walletConnect',
+              { walletAddress: address }
             );
           } catch (apiError) {
             alert('Failed to save wallet: ' + (apiError.response?.data?.message || apiError.message));
@@ -72,6 +73,18 @@ const wallets = [
         })
       );
       navigate('/connected-wallet');
+    }
+  };
+
+  // Add disconnect handler
+  const handleDisconnect = async (walletAddress) => {
+    try {
+      await api.put('/user/walletDissConnect', { walletAddress });
+      dispatch(connectWallet({ walletAddress: '', balance: '0.00', walletType: '' }));
+      alert('Wallet disconnected successfully.');
+      navigate('/wallet');
+    } catch (error) {
+      alert('Failed to disconnect wallet: ' + (error.response?.data?.message || error.message));
     }
   };
   return (

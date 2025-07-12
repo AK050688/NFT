@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { signup } from '../api/auth';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -33,16 +33,15 @@ function Signup() {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.post(`${API_BASE_URL}/user/userSignup`,form);
-      const data = res.data;
-      if (res.status === 200 && data.responseCode === 200) {
+      const data = await signup(form);
+      if (data.responseCode === 200) {
         setMessage('Signup successful! Redirecting to login...');
         setTimeout(() => navigate('/NFTS-login'), 1500);
       } else {
         setMessage(data.responseMessage || 'Signup failed.');
       }
     } catch (err) {
-      setMessage(err.response?.data?.responseMessage || 'Network error. Please try again.');
+      setMessage(err?.responseMessage || 'Network error. Please try again.');
     }
     setLoading(false);
   };

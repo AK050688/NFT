@@ -4,16 +4,22 @@ import { IoMdExit } from "react-icons/io";
 import { useSelector, useDispatch } from "react-redux";
 import { disconnectWallet } from "../redux/slices/nftSlice";
 import { useNavigate } from 'react-router-dom';
+import api from '../api/axios';
 
 const WalletConnected = () => {
   const { walletAddress, balance, walletType } = useSelector((state) => state.wallet);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleDisconnect = () => {
-    dispatch(disconnectWallet());
-    alert('Wallet disconnected successfully.');
-    navigate('/wallet'); // Redirect to wallet connection page
+  const handleDisconnect = async () => {
+    try {
+      await api.put('/user/walletDissConnect', { walletAddress });
+      dispatch(disconnectWallet());
+      alert('Wallet disconnected successfully.');
+      navigate('/wallet');
+    } catch (error) {
+      alert('Failed to disconnect wallet: ' + (error.response?.data?.message || error.message));
+    }
   };
 
   return (<div className="">

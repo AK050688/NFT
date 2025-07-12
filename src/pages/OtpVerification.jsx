@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import api from '../api/axios';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -24,7 +24,7 @@ const OtpVerification = () => {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.put(`${API_BASE_URL}/user/otpVerification`, { email, otp });
+      const res = await api.put('/user/otpVerification', { email, otp });
       const data = res.data;
       if (res.status === 200 && data.responseCode === 200) {
         setMessage('OTP verified successfully!');
@@ -46,7 +46,7 @@ const OtpVerification = () => {
     setLoading(true);
     setMessage('');
     try {
-      const res = await axios.put(`${API_BASE_URL}/user/resendOtp`, { email });
+      const res = await api.put('/user/resendOtp', { email });
       const data = res.data;
       if (res.status === 200 && data.responseCode === 200) {
         setMessage('OTP resent successfully!');
