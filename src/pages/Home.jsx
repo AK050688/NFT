@@ -259,9 +259,9 @@ const Home = () => {
         <div className="bg md:top-100 z-0 -left-30"></div>
       </div>
       <div className="md:flex relative w-full justify-center text-center items-center mt-8 md:-top-100">
-        <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
+        <Link to="/market-place" className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6 transition hover:bg-[#D54CFF] hover:text-white">
           View More
-        </button>
+        </Link>
       </div>
       {/* Marketplace Section */}
       <div className="mt-8 md:mt-0 relative md:-top-90">
@@ -291,9 +291,9 @@ const Home = () => {
         </div>
       </div>
       <div className="flex relative w-full justify-center text-center items-center mt-8 md:-top-70">
-        <button className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6">
+        <Link to="/market-place" className="btn rounded-[144.74px] bg-[#D54CFF1A] text-white border-0 shadow-none text-2xl px-6 py-6 transition hover:bg-[#D54CFF] hover:text-white">
           View More
-        </button>
+        </Link>
       </div>
       {/* How It Works Section */}
       <div className="relative mt-8 md:-top-55">

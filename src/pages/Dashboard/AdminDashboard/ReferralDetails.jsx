@@ -26,8 +26,8 @@ export default function ReferralDetails() {
   );
 
   return (
-    <div className="bg-black min-h-screen pt-16 sm:pt-24 p-2 sm:p-6">
-      <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md max-w-5xl mx-auto flex flex-col min-h-screen">
+    <div className="bg-black min-h-screen pt-16 p-2 sm:p-6">
+      <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md w-full flex flex-col min-h-screen">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Referral Details</h2>
         {/* Search & Filters */}
         <div className="flex flex-col md:flex-row gap-2 md:gap-4 mb-4 sm:mb-6">

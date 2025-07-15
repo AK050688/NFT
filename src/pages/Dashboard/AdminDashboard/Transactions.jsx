@@ -28,7 +28,7 @@ export default function Transactions() {
   );
 
   return (
-    <div className="bg-black min-h-screen pt-16 sm:pt-24 p-2 sm:p-6 w-full">
+    <div className="bg-black min-h-screen pt-16 p-2 sm:p-6 w-full">
       <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md w-full flex flex-col min-h-screen">
         <h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">Transactions</h2>
         {/* Search & Filters */}

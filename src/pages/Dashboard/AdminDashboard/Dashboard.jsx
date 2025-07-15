@@ -6,22 +6,22 @@ const metrics = [
   { label: 'Total Users', value: 1234,icon: <IoPerson className="text-2xl text-[#D54CFF]" /> },
   { label: 'NFTs Listed', value: 567, icon: <IoCube className="text-2xl text-[#D54CFF]" /> },
   { label: 'Transactions', value: 2890,icon: <IoSwapHorizontal className="text-2xl text-[#D54CFF]" /> },
-  { label: 'Active Bids', value: 42, icon: <IoClipboard className="text-2xl text-[#D54CFF]" /> },
+  // Removed 'Active Bids' metric as bid functionality is disabled
 ];
 
 const barData = [
-  { date: '1 Jul', sales: 20000, bids: 15000 },
-  { date: '2 Jul', sales: 30000, bids: 18000 },
-  { date: '3 Jul', sales: 25000, bids: 12000 },
-  { date: '4 Jul', sales: 40000, bids: 22000 },
-  { date: '5 Jul', sales: 52000, bids: 30000 },
-  { date: '6 Jul', sales: 35000, bids: 20000 },
-  { date: '7 Jul', sales: 42000, bids: 25000 },
-  { date: '8 Jul', sales: 38000, bids: 21000 },
-  { date: '9 Jul', sales: 44000, bids: 27000 },
-  { date: '10 Jul', sales: 50000, bids: 32000 },
-  { date: '11 Jul', sales: 60000, bids: 40000 },
-  { date: '12 Jul', sales: 65000, bids: 45000 },
+  { date: '1 Jul', sales: 20000 },
+  { date: '2 Jul', sales: 30000 },
+  { date: '3 Jul', sales: 25000 },
+  { date: '4 Jul', sales: 40000 },
+  { date: '5 Jul', sales: 52000 },
+  { date: '6 Jul', sales: 35000 },
+  { date: '7 Jul', sales: 42000 },
+  { date: '8 Jul', sales: 38000 },
+  { date: '9 Jul', sales: 44000 },
+  { date: '10 Jul', sales: 50000 },
+  { date: '11 Jul', sales: 60000 },
+  { date: '12 Jul', sales: 65000 },
 ];
 
 const donutData = [
@@ -43,48 +43,10 @@ const countryData = [
   { country: 'Japan', percent: 9 },
   { country: 'Brazil', percent: 8 },
 ];
-const bids = [
-  {
-    id: 1,
-    image: "/Images/profile.png",
-    title: "Rage Monkey",
-    user: "John abraham",
-    price: "0.0025 ETH",
-    offer: "0.0025 ETH",
-    timeLeft: "2h36m40s",
-  },
-  {
-    id: 2,
-    image: "/Images/profile.png",
-    title: "Rage Monkey",
-    user: "John abraham",
-    price: "0.0025 ETH",
-    offer: "0.0025 ETH",
-    timeLeft: "2h36m40s",
-  },
-  {
-    id: 3,
-    image: "/Images/profile.png",
-    title: "Rage Monkey",
-    user: "John abraham",
-    price: "0.0025 ETH",
-    offer: "0.0025 ETH",
-    timeLeft: "2h36m40s",
-  },
-  {
-    id: 4,
-    image: "/Images/profile.png",
-    title: "Rage Monkey",
-    user: "John abraham",
-    price: "0.0025 ETH",
-    offer: "0.0025 ETH",
-    timeLeft: "2h36m40s",
-  },
-];
 
 export default function AdminDashboard() {
   return (
-    <div className="min-h-screen p-2 sm:p-4 md:p-6 space-y-6 sm:space-y-10 bg-black">
+    <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md w-full flex flex-col min-h-screen">
       {/* Dashboard Title */}
       <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-4 sm:mb-8 tracking-tight">Admin Dashboard</h1>
       {/* Top Metrics Cards */}
@@ -151,60 +113,6 @@ export default function AdminDashboard() {
             ))}
           </ul>
         </div>
-      </div>
-       {/*Recent Bids*/}
-       <h2 className="text-white text-lg sm:text-xl md:text-2xl font-semibold text-center mb-4 sm:mb-6 md:mb-8 tracking-wider">
-        RECENT BIDS
-      </h2>
-      {/* Table Headers - Only visible on medium and up */}
-      <div className="hidden md:grid grid-cols-5 text-white text-xs sm:text-sm mb-2 sm:mb-4 px-2 sm:px-6">
-        <p className="col-span-1">Item List</p>
-        <p className="text-center">Open Price</p>
-        <p className="text-center">Your Offer</p>
-        <p className="text-center">Recent Offer</p>
-        <p className="text-right">Time Left</p>
-      </div>
-      {/* Bid Items */}
-      <div className="space-y-2 sm:space-y-4">
-        {bids.map((bid) => (
-          <div
-            key={bid.id}
-            className="bg-[#FFFFFF1A] rounded-2xl px-2 sm:px-4 md:px-6 py-3 sm:py-4 flex flex-col md:flex-row items-start md:items-center justify-between shadow-lg text-white text-xs sm:text-sm"
-          >
-            {/* Item Info */}
-            <div className="flex items-center gap-2 sm:gap-3 md:w-1/5 mb-2 md:mb-0">
-              <img
-                src={bid.image}
-                alt={bid.title}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full object-cover"
-              />
-              <div>
-                <p className="font-semibold">{bid.title}</p>
-                <p className="text-gray-400 text-[10px] sm:text-xs">{bid.user}</p>
-              </div>
-            </div>
-
-            {/* Labels and Values */}
-            <div className="flex flex-col md:flex-row md:items-center justify-between w-full md:w-4/5 gap-1 md:gap-0">
-              <div className="md:w-1/4 text-center md:text-left">
-                <span className="md:hidden text-gray-400">Open Price: </span>
-                {bid.price}
-              </div>
-              <div className="md:w-1/4 text-center">
-                <span className="md:hidden text-gray-400">Your Offer: </span>
-                {bid.offer}
-              </div>
-              <div className="md:w-1/4 text-center">
-                <span className="md:hidden text-gray-400">Recent Offer: </span>
-                {bid.offer}
-              </div>
-              <div className="md:w-1/4 text-right">
-                <span className="md:hidden text-gray-400">Time Left: </span>
-                {bid.timeLeft}
-              </div>
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );

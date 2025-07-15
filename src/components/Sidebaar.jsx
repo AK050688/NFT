@@ -1,15 +1,16 @@
 import React, { useState } from "react";
-import { HiViewGrid, HiUser, HiUpload, HiShoppingBag, HiCurrencyDollar, HiClipboardList, HiPlusCircle, HiUsers, HiMenu, HiX } from "react-icons/hi";
+import { HiViewGrid, HiUser, HiUpload, HiShoppingBag, HiCurrencyDollar, HiClipboardList, HiPlusCircle, HiUsers, HiMenu, HiX, HiCollection } from "react-icons/hi";
 import { NavLink } from "react-router-dom";
 
 const navItems = [
   { to: "/admin/dashboard", icon: <HiViewGrid size={22} />, label: "Dashboard" },
   { to: "/admin/users", icon: <HiUser size={22} />, label: "User Details" },
-  { to: "/admin/upload-nft", icon: <HiUpload size={22} />, label: "Upload NFT" },
+  { to: "/admin/create-nft", icon: <HiUpload size={22} />, label: "Create NFT" },
+  { to: "/admin/minted-nfts", icon: <HiCollection size={22} />, label: "Minted NFTs" },
   { to: "/admin/market-place", icon: <HiShoppingBag size={22} />, label: "Market Place" },
   { to: "/admin/transactions", icon: <HiCurrencyDollar size={22} />, label: "Transactions" },
-  { to: "/admin/bid-details", icon: <HiClipboardList size={22} />, label: "Bid Details" },
-  { to: "/admin/create-level", icon: <HiPlusCircle size={22} />, label: "Create Level" },
+  // { to: "/admin/bid-details", icon: <HiClipboardList size={22} />, label: "Bid Details" },
+  // { to: "/admin/create-level", icon: <HiPlusCircle size={22} />, label: "Create Level" },
   { to: "/admin/referral-details", icon: <HiUsers size={22} />, label: "Referrals" },
 ];
 
@@ -36,8 +37,8 @@ const Sidebar = () => {
       {/* Sidebar */}
       <div
         className={`fixed top-0 left-0 h-screen w-20 flex flex-col items-center bg-[#FFFFFF33] text-white shadow-lg z-50 transition-transform duration-300
-          ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:w-18 md:static md:flex md:h-screen md:top-0 md:left-0`}
-        style={{ minWidth: '72px' }}
+          ${open ? "translate-x-0" : "-translate-x-full"} md:translate-x-0 md:w-18 md:static md:flex md:h-screen md:top-0 md:left-0 overflow-y-auto`}
+        style={{ minWidth: '85px' }}
       >
         {/* Close button on mobile */}
         <button

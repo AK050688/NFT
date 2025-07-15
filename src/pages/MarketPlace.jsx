@@ -1,113 +1,85 @@
 import React, { useEffect, useState } from 'react';
-import { listAllNFTs, getNFTsByOwner, getNFTsByCreator } from '../api/nft';
+import { fetchNFTsByListedStatus } from '../api/nft';
 import NFTCard from '../components/NFTCard';
 
-const TABS = [
-  { key: 'all', label: 'All NFTs' },
-  { key: 'owner', label: 'By Owner' },
-  { key: 'creator', label: 'By Creator' },
-  // { key: 'forSale', label: 'For Sale' }, // Uncomment if you have a dedicated API or flag
+const listData = [
+  "ALL",
+  "ART",
+  "GAMING",
+  "METAVERSE",
+  "DIGHTALART",
+  "AI",
+  "FUTURISTIC",
+  "RARE",
 ];
-
-const MarketPlace = () => {
-  const [tab, setTab] = useState('all');
+export default function MarketPlace() {
   const [nfts, setNfts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [ownerId, setOwnerId] = useState('');
-  const [creatorId, setCreatorId] = useState('');
   const [error, setError] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('ALL');
 
   useEffect(() => {
-    const fetchNFTs = async () => {
+    const load = async () => {
       setLoading(true);
       setError('');
       try {
-        let data;
-        if (tab === 'all') {
-          data = await listAllNFTs();
-        } else if (tab === 'owner') {
-          if (!ownerId) {
-            setNfts([]);
-            setLoading(false);
-            return;
-          }
-          data = await getNFTsByOwner(ownerId);
-        } else if (tab === 'creator') {
-          if (!creatorId) {
-            setNfts([]);
-            setLoading(false);
-            return;
-          }
-          data = await getNFTsByCreator(creatorId);
-        }
-        setNfts(data.result || []);
-      } catch (err) {
-        setError('Failed to fetch NFTs.');
-        setNfts([]);
+        const data = await fetchNFTsByListedStatus(true);
+        setNfts(Array.isArray(data.result) ? data.result : []);
+      } catch (e) {
+        setError('Failed to load NFTs');
       }
       setLoading(false);
     };
-    fetchNFTs();
-  }, [tab, ownerId, creatorId]);
+    load();
+  }, []);
+
+  // Filter NFTs by selected category (case-insensitive)
+  const filteredNFTs = selectedCategory === 'ALL'
+    ? nfts
+    : nfts.filter(nft => {
+        const cat = nft.category ? nft.category.toUpperCase() : 'UNCATEGORIZED';
+        return cat === selectedCategory;
+      });
 
   return (
-    <div className="min-h-screen bg-black pt-20 px-4">
-      <h2 className="text-3xl font-bold text-white mb-8 text-center">Marketplace</h2>
-      {/* Tabs */}
-      <div className="flex justify-center mb-8 gap-4">
-        {TABS.map(({ key, label }) => (
-          <button
-            key={key}
-            onClick={() => setTab(key)}
-            className={`px-6 py-2 rounded-full font-semibold transition text-sm md:text-base ${
-              tab === key ? 'bg-[#D54CFF] text-white' : 'bg-[#232046] text-white/70 hover:bg-[#D54CFF] hover:text-white'
-            }`}
-          >
-            {label}
-          </button>
-        ))}
-      </div>
-      {/* Input for Owner/Creator ID */}
-      {tab === 'owner' && (
-        <div className="flex justify-center mb-6">
-          <input
-            type="text"
-            value={ownerId}
-            onChange={e => setOwnerId(e.target.value)}
-            placeholder="Enter Owner ID"
-            className="w-full max-w-xs p-2 rounded bg-[#232046] text-white"
-          />
-        </div>
-      )}
-      {tab === 'creator' && (
-        <div className="flex justify-center mb-6">
-          <input
-            type="text"
-            value={creatorId}
-            onChange={e => setCreatorId(e.target.value)}
-            placeholder="Enter Creator ID"
-            className="w-full max-w-xs p-2 rounded bg-[#232046] text-white"
-          />
-        </div>
-      )}
-      {loading ? (
-        <div className="text-white text-center mt-10">Loading NFTs...</div>
-      ) : error ? (
-        <div className="text-red-400 text-center mt-10">{error}</div>
-      ) : (
-        <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-            {nfts.map(nft => (
-              <NFTCard key={nft._id || nft.tokenId} nft={nft} />
+    <div className="min-h-screen bg-black pt-22 px-4">
+      <div className="bg-[#181818] rounded-xl p-2 sm:p-4 md:p-8 text-white shadow-md max-w-5xl mx-auto">
+        <h1 className="text-[20px] md:text-[64px] font-[500] w-full text-center mb-8">EXPLORE MARKETPLACE</h1>
+        {/* Category Filter Bar */}
+        <div className="w-full mb-10 flex flex-col items-center">
+          <div className="hidden md:flex flex-wrap justify-center gap-x-4 gap-y-3">
+            {listData.map((list, index) => (
+              <button
+                key={index}
+                className={`bg-[#FFFFFF1A] text-[16px] font-[600] px-4 py-2 rounded-3xl transition-colors duration-200 ${selectedCategory === list ? 'bg-[#D54CFF] text-white' : 'text-white'}`}
+                onClick={() => setSelectedCategory(list)}
+              >
+                {list}
+              </button>
             ))}
           </div>
-          {nfts.length === 0 && (
-            <div className="text-white text-center mt-10">No NFTs found.</div>
-          )}
-        </>
-      )}
+          {/* Mobile filter bar */}
+          <div className="flex md:hidden gap-2 overflow-x-auto py-2 px-2 w-full">
+            {listData.map((list, index) => (
+              <button
+                key={index}
+                className={`bg-[#FFFFFF1A] text-[14px] font-[600] px-3 py-1 rounded-3xl whitespace-nowrap transition-colors duration-200 mx-1 ${selectedCategory === list ? 'bg-[#D54CFF] text-white' : 'text-white'}`}
+                onClick={() => setSelectedCategory(list)}
+              >
+                {list}
+              </button>
+            ))}
+          </div>
+        </div>
+        {/* NFT Grid */}
+        {loading ? <div className="text-white text-center mt-10">Loading NFTs...</div> : error ? <div className="text-red-400 text-center mt-10">{error}</div> : filteredNFTs.length === 0 ? <div className="text-white text-center mt-10">No NFTs found.</div> : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+            {filteredNFTs.map(nft => (
+              <NFTCard key={nft._id} nft={nft} showPrice showListedDate />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
-};
-
-export default MarketPlace;
+}

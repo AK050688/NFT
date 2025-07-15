@@ -3,109 +3,32 @@ import { useParams, Link } from 'react-router-dom';
 import { FaEthereum, FaHeart, FaShare, FaEye, FaClock, FaTag, FaUser, FaHistory, FaGavel } from 'react-icons/fa';
 import { IoStatsChart, IoTime } from 'react-icons/io5';
 import NFTCard from '../components/NFTCard';
+import { getNFTDetail } from '../api/nft';
 
 const NFTDetail = () => {
   const { id } = useParams();
   const [nft, setNft] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
-  const [bidAmount, setBidAmount] = useState('');
   const [activeTab, setActiveTab] = useState('details');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    setTimeout(() => {
-      setNft({
-        id: id,
-        name: "Cyberpunk Warrior #1234",
-        image: "/Images/card4.png",
-        creator: "Alex Chen",
-        creatorAvatar: "/Images/profile.png",
-        creatorAddress: "0x1234...5678",
-        price: "2.5",
-        currency: "ETH",
-        likes: 1247,
-        views: 8923,
-        isLiked: false,
-        isAuction: true,
-        auctionEndTime: "2 days 14 hours",
-        collection: "Cyberpunk Warriors",
-        rarity: "Legendary",
-        status: "auction",
-        description: "A unique cyberpunk warrior NFT with rare attributes. This piece represents the fusion of technology and art, featuring advanced AI-generated elements and hand-crafted details.",
-        attributes: [
-          { trait: "Background", value: "Neon City", rarity: "15%" },
-          { trait: "Weapon", value: "Plasma Rifle", rarity: "8%" },
-          { trait: "Armor", value: "Quantum Shield", rarity: "3%" },
-          { trait: "Accessory", value: "Holographic Visor", rarity: "12%" },
-          { trait: "Rarity", value: "Legendary", rarity: "1%" }
-        ],
-        history: [
-          { type: "Minted", price: "0.1 ETH", from: "Creator", to: "Creator", date: "2024-01-15" },
-          { type: "Listed", price: "1.2 ETH", from: "Creator", to: "Marketplace", date: "2024-01-20" },
-          { type: "Sold", price: "1.8 ETH", from: "Creator", to: "0x1234...5678", date: "2024-02-01" },
-          { type: "Listed", price: "2.5 ETH", from: "0x1234...5678", to: "Marketplace", date: "2024-02-15" }
-        ],
-        bids: [
-          { bidder: "0xabcd...efgh", amount: "2.3 ETH", time: "2 hours ago" },
-          { bidder: "0x9876...5432", amount: "2.1 ETH", time: "4 hours ago" },
-          { bidder: "0x5678...1234", amount: "2.0 ETH", time: "1 day ago" }
-        ],
-                 relatedNFTs: [
-           {
-             id: "nft-2",
-             name: "Cyberpunk Warrior #1235",
-             image: "/Images/card-5.jpg",
-             creator: "Alex Chen",
-             price: "1.8",
-             currency: "ETH",
-             likes: 892,
-             views: 5432
-           },
-           {
-             id: "nft-3",
-             name: "Cyberpunk Warrior #1236",
-             image: "/Images/card6.jpg",
-             creator: "Alex Chen",
-             price: "3.2",
-             currency: "ETH",
-             likes: 1567,
-             views: 7890
-           },
-           {
-             id: "nft-4",
-             name: "Cyberpunk Warrior #1237",
-             image: "/Images/card7.png",
-             creator: "Alex Chen",
-             price: "0.9",
-             currency: "ETH",
-             likes: 432,
-             views: 2345
-           },
-           {
-             id: "nft-5",
-             name: "Cyberpunk Warrior #1238",
-             image: "/Images/card8.png",
-             creator: "Alex Chen",
-             price: "2.1",
-             currency: "ETH",
-             likes: 678,
-             views: 3456
-           }
-         ]
-      });
+    const fetchNFT = async () => {
+      setLoading(true);
+      try {
+        const nftObj = await getNFTDetail(id);
+        setNft(nftObj); // Set the NFT object directly
+      } catch (err) {
+        setNft(null);
+      }
       setLoading(false);
-    }, 1000);
+    };
+    fetchNFT();
   }, [id]);
 
   const handleLike = () => {
     setIsLiked(!isLiked);
     // TODO: Implement like functionality
-  };
-
-  const handleBid = (e) => {
-    e.preventDefault();
-    // TODO: Implement bid functionality
-    console.log('Bidding:', bidAmount, 'ETH');
   };
 
   const handleBuyNow = () => {
@@ -133,9 +56,21 @@ const NFTDetail = () => {
     );
   }
 
+  // Map backend NFT fields to UI fields
+  const attributes = [
+    { trait: 'Strength', value: nft.traits?.strength },
+    { trait: 'Intelligence', value: nft.traits?.intelligence },
+    { trait: 'Luck', value: nft.traits?.luck },
+    { trait: 'Level', value: nft.level },
+    { trait: 'XP', value: nft.xp },
+    { trait: 'Royalty', value: nft.royalty },
+  ];
+  const safeTransferHistory = Array.isArray(nft.transferHistory) ? nft.transferHistory : [];
+  const safeRelatedNFTs = Array.isArray(nft.relatedNFTs) ? nft.relatedNFTs : [];
+
   return (
-    <div className="min-h-screen bg-black text-white pt-20">
-      <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-[#18122B] to-[#232046] text-white pt-20 pb-10 flex justify-center items-start">
+      <div className="w-full max-w-5xl mx-auto px-2 sm:px-6">
         {/* Breadcrumb */}
         <nav className="mb-8">
           <ol className="flex items-center space-x-2 text-sm text-gray-400">
@@ -143,198 +78,78 @@ const NFTDetail = () => {
             <li>/</li>
             <li><Link to="/marketplace" className="hover:text-white">Marketplace</Link></li>
             <li>/</li>
-            <li><Link to={`/collection/${nft.collection}`} className="hover:text-white">{nft.collection}</Link></li>
-            <li>/</li>
-            <li className="text-white">{nft.name}</li>
+            <li className="text-white font-semibold">{nft.name}</li>
           </ol>
         </nav>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-          {/* Left Column - Image and Actions */}
-          <div className="space-y-6">
-            {/* Main Image */}
-            <div className="relative bg-gray-900 rounded-2xl overflow-hidden">
+        <div className="flex flex-col lg:flex-row gap-10">
+          {/* Left Column - Image */}
+          <div className="flex-1 flex flex-col items-center">
+            <div className="relative w-full max-w-md bg-[#232046] rounded-3xl shadow-2xl overflow-hidden mb-6">
               <img
-                src={nft.image}
+                src={nft.imageUrl}
                 alt={nft.name}
-                className="w-full h-96 object-cover"
+                className="w-full h-96 object-cover rounded-3xl border-4 border-[#D54CFF] shadow-lg"
               />
-              <div className="absolute top-4 right-4 flex gap-2">
-                <button
-                  onClick={handleLike}
-                  className={`p-2 rounded-full ${isLiked ? 'bg-red-500' : 'bg-black/50'} text-white hover:bg-red-500 transition-colors`}
-                >
-                  <FaHeart className={isLiked ? 'fill-current' : ''} />
-                </button>
-                <button className="p-2 rounded-full bg-black/50 text-white hover:bg-gray-700 transition-colors">
-                  <FaShare />
-                </button>
-              </div>
             </div>
-
-            {/* Action Buttons */}
-            <div className="space-y-4">
-              {nft.isAuction ? (
-                <div className="bg-gray-900 rounded-xl p-6">
-                  <h3 className="text-lg font-semibold mb-4">Place Bid</h3>
-                  <form onSubmit={handleBid} className="space-y-4">
-                    <div>
-                      <label className="block text-sm text-gray-400 mb-2">Bid Amount (ETH)</label>
-                      <input
-                        type="number"
-                        step="0.01"
-                        min={nft.bids[0]?.amount?.split(' ')[0] || nft.price}
-                        value={bidAmount}
-                        onChange={(e) => setBidAmount(e.target.value)}
-                        className="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white focus:outline-none focus:border-purple-500"
-                        placeholder="Enter bid amount"
-                      />
-                    </div>
-                    <button
-                      type="submit"
-                      className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 rounded-lg font-semibold transition-colors"
-                    >
-                      Place Bid
-                    </button>
-                  </form>
+            {/* Attributes Row under Image */}
+            <div className="w-full max-w-md flex flex-wrap justify-center gap-3 mb-4">
+              {attributes.map((attr, index) => (
+                <div key={index} className="flex flex-col items-center bg-[#18122B] border border-[#D54CFF] rounded-full px-5 py-2 shadow text-center min-w-[90px]">
+                  <span className="text-xs text-purple-300 font-semibold uppercase tracking-wide">{attr.trait}</span>
+                  <span className="text-lg font-bold text-white mt-1">{attr.value}</span>
                 </div>
-              ) : (
-                <button
-                  onClick={handleBuyNow}
-                  className="w-full bg-green-600 hover:bg-green-700 text-white py-4 rounded-xl font-semibold text-lg transition-colors"
-                >
-                  Buy Now for {formatPrice(nft.price, nft.currency)}
-                </button>
-              )}
+              ))}
             </div>
+            {/* Description Card */}
+            {nft.description && (
+              <div className="w-full bg-[#18122B] rounded-xl p-4 shadow text-gray-200 text-center text-base">
+                {nft.description}
+              </div>
+            )}
           </div>
 
           {/* Right Column - Details */}
-          <div className="space-y-6">
+          <div className="flex-1 bg-[#18122B] rounded-3xl shadow-xl p-8 flex flex-col gap-8 min-w-[320px]">
             {/* NFT Info */}
             <div>
-              <div className="flex items-center gap-2 mb-2">
-                <span className="text-sm text-gray-400">{nft.collection}</span>
-                {nft.rarity && (
-                  <span className="px-2 py-1 bg-yellow-500 text-black text-xs rounded-full font-semibold">
-                    {nft.rarity}
-                  </span>
-                )}
+              <h1 className="text-4xl font-extrabold mb-2 text-[#D54CFF]">{nft.name}</h1>
+              <div className="flex flex-wrap gap-4 items-center mb-4">
+                <span className="bg-[#232046] text-purple-300 px-3 py-1 rounded-full text-xs font-semibold">Token ID: {nft.tokenId}</span>
+                <span className="bg-[#232046] text-green-300 px-3 py-1 rounded-full text-xs font-semibold">Status: {nft.status}</span>
               </div>
-              <h1 className="text-3xl font-bold mb-4">{nft.name}</h1>
-              <p className="text-gray-300 mb-6">{nft.description}</p>
             </div>
 
             {/* Creator Info */}
-            <div className="bg-gray-900 rounded-xl p-6">
-              <h3 className="text-lg font-semibold mb-4">Creator</h3>
-              <div className="flex items-center gap-4">
-                <img
-                  src={nft.creatorAvatar}
-                  alt={nft.creator}
-                  className="w-12 h-12 rounded-full object-cover"
-                />
-                <div>
-                  <p className="font-semibold">{nft.creator}</p>
-                  <p className="text-sm text-gray-400">{nft.creatorAddress}</p>
-                </div>
+            <div className="flex items-center gap-4 bg-[#232046] rounded-xl p-4">
+              <div className="flex flex-col flex-1">
+                <span className="text-sm text-gray-400">Creator</span>
+                <span className="font-bold text-lg text-white">{nft.creator?.userName || nft.creator?.firstName || 'Unknown'}</span>
+                <span className="text-xs text-gray-400">{nft.creator?.email}</span>
+              </div>
+              {nft.creator?._id && (
                 <Link
-                  to={`/artist/${nft.creator}`}
-                  className="ml-auto bg-purple-600 hover:bg-purple-700 px-4 py-2 rounded-lg text-sm font-semibold transition-colors"
+                  to={`/artist/${nft.creator._id}`}
+                  className="ml-auto bg-[#D54CFF] hover:bg-[#b13be0] text-white px-4 py-2 rounded-full text-sm font-semibold transition-colors shadow"
                 >
                   View Profile
                 </Link>
-              </div>
+              )}
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-3 gap-4">
-              <div className="bg-gray-900 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-purple-400">{nft.likes}</div>
-                <div className="text-sm text-gray-400">Likes</div>
+              <div className="bg-[#232046] rounded-xl p-4 text-center">
+                <div className="text-2xl font-bold text-purple-400">{nft.level}</div>
+                <div className="text-xs text-gray-400 mt-1">Level</div>
               </div>
-              <div className="bg-gray-900 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-blue-400">{nft.views}</div>
-                <div className="text-sm text-gray-400">Views</div>
+              <div className="bg-[#232046] rounded-xl p-4 text-center">
+                <div className="text-2xl font-bold text-blue-400">{nft.xp}</div>
+                <div className="text-xs text-gray-400 mt-1">XP</div>
               </div>
-              <div className="bg-gray-900 rounded-xl p-4 text-center">
-                <div className="text-2xl font-bold text-green-400">{nft.price}</div>
-                <div className="text-sm text-gray-400">Floor Price</div>
-              </div>
-            </div>
-
-            {/* Tabs */}
-            <div className="bg-gray-900 rounded-xl">
-              <div className="flex border-b border-gray-800">
-                {['details', 'history', 'bids'].map((tab) => (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`flex-1 py-4 px-6 text-sm font-semibold transition-colors ${
-                      activeTab === tab
-                        ? 'text-white border-b-2 border-purple-500'
-                        : 'text-gray-400 hover:text-white'
-                    }`}
-                  >
-                    {tab.charAt(0).toUpperCase() + tab.slice(1)}
-                  </button>
-                ))}
-              </div>
-
-              <div className="p-6">
-                {activeTab === 'details' && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold mb-4">Attributes</h4>
-                    <div className="grid grid-cols-2 gap-4">
-                      {nft.attributes.map((attr, index) => (
-                        <div key={index} className="bg-gray-800 rounded-lg p-3">
-                          <div className="text-sm text-gray-400">{attr.trait}</div>
-                          <div className="font-semibold">{attr.value}</div>
-                          <div className="text-xs text-purple-400">{attr.rarity}</div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 'history' && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold mb-4">Transaction History</h4>
-                    <div className="space-y-3">
-                      {nft.history.map((tx, index) => (
-                        <div key={index} className="flex items-center justify-between py-2 border-b border-gray-800">
-                          <div>
-                            <div className="font-semibold">{tx.type}</div>
-                            <div className="text-sm text-gray-400">{tx.from} → {tx.to}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold">{tx.price}</div>
-                            <div className="text-sm text-gray-400">{tx.date}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {activeTab === 'bids' && (
-                  <div className="space-y-4">
-                    <h4 className="font-semibold mb-4">Recent Bids</h4>
-                    <div className="space-y-3">
-                      {nft.bids.map((bid, index) => (
-                        <div key={index} className="flex items-center justify-between py-2 border-b border-gray-800">
-                          <div>
-                            <div className="font-semibold">{bid.bidder}</div>
-                            <div className="text-sm text-gray-400">{bid.time}</div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-semibold text-green-400">{bid.amount}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                )}
+              <div className="bg-[#232046] rounded-xl p-4 text-center">
+                <div className="text-2xl font-bold text-green-400">{nft.royalty}</div>
+                <div className="text-xs text-gray-400 mt-1">Royalty</div>
               </div>
             </div>
           </div>
@@ -342,11 +157,11 @@ const NFTDetail = () => {
 
         {/* Related NFTs */}
         <div className="mt-16">
-          <h2 className="text-2xl font-bold mb-8">More from this collection</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {nft.relatedNFTs.map((relatedNFT) => (
-              <NFTCard key={relatedNFT.id} nft={relatedNFT} />
-            ))}
+          <h2 className="text-2xl font-bold mb-8 text-center text-[#D54CFF]">More from this collection</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+            {safeRelatedNFTs.length > 0 ? safeRelatedNFTs.map((relatedNFT) => (
+              <NFTCard key={relatedNFT.id || relatedNFT._id} nft={relatedNFT} />
+            )) : <div className="text-gray-400 col-span-4 text-center">No related NFTs.</div>}
           </div>
         </div>
       </div>

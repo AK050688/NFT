@@ -11,8 +11,9 @@ export const mintNFT = async (nftData) => {
 };
 
 export const getNFTDetail = async (nftId) => {
-  const response = await api.get(`/nfts/${nftId}`);
-  return response.data;
+  const response = await api.get(`/nft/getNftById/${nftId}`);
+  // The backend returns { result: [nft], ... }
+  return response.data.result && response.data.result[0] ? response.data.result[0] : null;
 };
 
 export const getNFTsByOwner = async (ownerId) => {
@@ -32,5 +33,19 @@ export const listAllNFTs = async () => {
 
 export const listNFTForSell = async (nftData) => {
   const response = await api.put('/nft/listNftForSell', nftData);
+  return response.data;
+};
+
+export const fetchMintedNFTs = async () => {
+  const response = await api.get('/nft/listOfNft', { params: { isListed: false } });
+  return response.data;
+};
+
+export const fetchNFTsByListedStatus = async (listedStatus = true) => {
+  const token = localStorage.getItem('token');
+  const response = await api.get('/nft/getNftByUserListedStatus', {
+    params: { listedStatus },
+    headers: { Authorization: token }
+  });
   return response.data;
 }; 

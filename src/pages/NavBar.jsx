@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
-import { FiMenu, FiX } from "react-icons/fi";
+import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
 
@@ -53,18 +53,18 @@ const NavBar = () => {
             ))}
             {loggedIn && (
               <>
-                <li>
+                {/* <li>
                   <NavLink
                     to="/mint-nft"
                     className="bg-[#D54CFF] text-white text-sm font-semibold rounded-full px-4 py-2 shadow-md hover:bg-[#c043e8] transition"
                   >
                     Mint NFT
                   </NavLink>
-                </li>
+                </li> */}
                 <li>
                   <NavLink
                     to="/generate-nft"
-                    className="bg-[#D54CFF] text-white text-sm  font-semibold rounded-full px-4 py-2 shadow-md hover:bg-[#c043e8] transition"
+                    className="text-white text-sm font-semibold rounded-full px-6 py-2 transition border border-transparent hover:bg-white/20 hover:text-[#D54CFF] focus:bg-white/30 focus:text-[#D54CFF]"
                   >
                     Generate NFT
                   </NavLink>
@@ -79,19 +79,21 @@ const NavBar = () => {
               <div className="relative rounded-full">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="bg-[#D54CFF] text-white font-semibold rounded-full px-6 py-2 shadow-md hover:bg-[#c043e8] transition flex items-center min-w-[110px] justify-center"
+                  className={`text-white text-sm font-semibold rounded-full px-6 py-2 transition flex items-center min-w-[110px] justify-center border-2 border-transparent hover:bg-white/20 hover:text-[#D54CFF] focus:bg-white/30 focus:text-[#D54CFF] ${dropdownOpen ? 'ring-2 ring-white/80' : ''}`}
+                  style={{ outline: 'none' }}
                 >
+                  <FiUser className="mr-2 w-5 h-5" />
                   {username}
-                  <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                  <svg className={`ml-2 w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                   </svg>
                 </button>
                 {dropdownOpen && (
-                  <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
+                  <div className="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-2xl z-50 py-2 px-1 border border-gray-200 backdrop-blur-md">
                     {isAdmin ? (
                       <>
                         <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/admin/dashboard'); setDropdownOpen(false);}}>Admin Dashboard</button>
-                        <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button>
+                        {/* <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button> */}
                       </>
                     ) : (
                       <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Profile</button>
@@ -142,13 +144,13 @@ const NavBar = () => {
               ))}
               {loggedIn && (
                 <>
-                  <NavLink
+                  {/* <NavLink
                     to="/mint-nft"
                     className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full text-center"
                     onClick={() => setMenuOpen(false)}
                   >
                     Mint NFT
-                  </NavLink>
+                  </NavLink> */}
                   <NavLink
                     to="/generate-nft"
                     className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full text-center"
@@ -162,19 +164,21 @@ const NavBar = () => {
                 <div className="relative">
                   <button
                     onClick={() => setDropdownOpen(!dropdownOpen)}
-                    className="bg-white text-[#D54CFF] font-semibold rounded-full px-4 py-2 shadow hover:bg-gray-100 transition w-full flex items-center"
+                    className={`text-white font-semibold rounded-full px-6 py-2 transition w-full flex items-center border-2 border-transparent hover:bg-white/20 hover:text-[#D54CFF] focus:bg-white/30 focus:text-[#D54CFF] ${dropdownOpen ? 'ring-2 ring-[#D54CFF]/60' : ''}`}
+                    style={{ outline: 'none' }}
                   >
+                    <FiUser className="mr-2 w-5 h-5" />
                     {username}
-                    <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                    <svg className={`ml-2 w-4 h-4 transition-transform duration-200 ${dropdownOpen ? 'rotate-180' : ''}`} fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
                   {dropdownOpen && (
-                    <div className="absolute right-0 mt-2 w-40 bg-white text-black rounded shadow-lg z-50">
+                    <div className="absolute right-0 mt-2 w-44 bg-white text-black rounded-xl shadow-2xl z-50 py-2 px-1 border border-gray-200 backdrop-blur-md">
                       {isAdmin ? (
                         <>
                           <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/admin/dashboard'); setDropdownOpen(false);}}>Admin Dashboard</button>
-                          <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button>
+                          {/* <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/profile'); setDropdownOpen(false);}}>Admin Profile</button> */}
                         </>
                       ) : (
                         <button className="block w-full text-left px-4 py-2 hover:bg-gray-100" onClick={() => {navigate('/dashboard'); setDropdownOpen(false);}}>Profile</button>

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { FaEthereum, FaHeart, FaEye } from 'react-icons/fa';
 
-const NFTCard = ({ nft, variant = 'default' }) => {
+const NFTCard = ({ nft, variant = 'default', showPrice, showListedDate }) => {
   const {
     id,
     name,
@@ -18,7 +18,9 @@ const NFTCard = ({ nft, variant = 'default' }) => {
     auctionEndTime,
     collection,
     rarity,
-    status = 'available' // available, sold, auction
+    status = 'available', // available, sold, auction
+    listedPrice,
+    updatedAt
   } = nft;
 
   const handleLike = (e) => {
@@ -60,7 +62,7 @@ const NFTCard = ({ nft, variant = 'default' }) => {
   };
 
   return (
-    <Link to={`/nft/${id}`} className="group">
+    <Link to={`/nft/${id || nft._id}`} className="group">
       <div className="relative bg-black rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
         {/* Status and Rarity Badges */}
         {getStatusBadge()}
@@ -69,7 +71,7 @@ const NFTCard = ({ nft, variant = 'default' }) => {
         {/* Image Container */}
         <div className="relative overflow-hidden bg-gray-900">
           <img
-            src={image}
+            src={image || nft.imageUrl}
             alt={name}
             className="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300"
           />
@@ -81,10 +83,12 @@ const NFTCard = ({ nft, variant = 'default' }) => {
           <div className="flex items-center gap-2 mb-3">
             <img
               src={creatorAvatar || '/Images/TrendingCarsdsImg.png'}
-              alt={creator}
+              alt={typeof creator === 'object' ? (creator?.userName || creator?.name || 'Unknown') : creator}
               className="w-6 h-6 rounded-full object-cover"
             />
-            <span className="text-sm text-gray-300 font-medium">{creator}</span>
+            <span className="text-sm text-gray-300 font-medium">
+              {typeof creator === 'object' ? (creator?.userName || creator?.name || 'Unknown') : creator}
+            </span>
           </div>
 
           {/* NFT Name */}
@@ -94,7 +98,9 @@ const NFTCard = ({ nft, variant = 'default' }) => {
 
           {/* Collection */}
           {collection && (
-            <p className="text-sm text-gray-400 mb-3">{collection}</p>
+            <p className="text-sm text-gray-400 mb-3">
+              {typeof collection === 'object' ? (collection?.name || collection?.title || 'Unknown') : collection}
+            </p>
           )}
 
           {/* Price and Actions */}
@@ -102,10 +108,9 @@ const NFTCard = ({ nft, variant = 'default' }) => {
             <div className="flex items-center gap-1">
               <FaEthereum className="text-purple-400" />
               <span className="text-white font-semibold">
-                {formatPrice(price, currency)}
+                {showPrice ? (listedPrice ? `${listedPrice} ETH` : 'N/A') : formatPrice(price, currency)}
               </span>
             </div>
-            
             <div className="flex items-center gap-3 text-sm text-gray-400">
               <span className="flex items-center gap-1">
                 <FaHeart className="text-red-400" />
@@ -117,6 +122,11 @@ const NFTCard = ({ nft, variant = 'default' }) => {
               </span>
             </div>
           </div>
+
+          {/* Listed Date */}
+          {showListedDate && updatedAt && (
+            <div className="text-xs text-gray-400 mt-2">Listed: {new Date(updatedAt).toLocaleString()}</div>
+          )}
 
           {/* Auction Timer */}
           {isAuction && auctionEndTime && (

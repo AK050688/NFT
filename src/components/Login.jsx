@@ -34,8 +34,8 @@ function LoginPage() {
       
       if (data.responseCode === 200) {
         localStorage.setItem('token', data.result.token);
-        console.log(data.result.token)
-        localStorage.setItem('user', JSON.stringify(data.result));
+        console.log(data.result)
+        // localStorage.setItem('user', JSON.stringify(data.result));
         dispatch(loginSuccess({ token: data.result.token, user: data.result }));
         setMessage('Login Successful! Redirecting...');
         setLoading(false);

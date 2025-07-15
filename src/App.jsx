@@ -14,14 +14,13 @@ import ProfileDashboard from "./pages/Dashboard/UserDashboard/ProfileDashboard";
 import Saved from "./pages/Dashboard/UserDashboard/Saved";
 import Collections from "./pages/Dashboard/UserDashboard/Collections";
 import Search from "./pages/Dashboard/UserDashboard/Search";
-import TrendingBids from "./pages/Dashboard/UserDashboard/TrendingBids";
 import AdminDashboardLayout from "./pages/Dashboard/AdminDashboard/Layout";
 import AdminDashboard from "./pages/Dashboard/AdminDashboard/Dashboard";
 import UserDetails from "./pages/Dashboard/AdminDashboard/UserDetails";
-import UploadNFT from "./pages/Dashboard/AdminDashboard/UploadNFT";
+import CreateNFT from "./pages/Dashboard/AdminDashboard/UploadNFT";
 import MarketPlace from "./pages/Dashboard/AdminDashboard/MarketPlace";
 import Transactions from "./pages/Dashboard/AdminDashboard/Transactions";
-import BidDetails from "./pages/Dashboard/AdminDashboard/BidDetails";
+// import BidDetails from "./pages/Dashboard/AdminDashboard/BidDetails";
 import CreateLevel from "./pages/Dashboard/AdminDashboard/CreateLevel";
 import ReferralDetails from "./pages/Dashboard/AdminDashboard/ReferralDetails";
 import ArtistPage from "./pages/ArtistPage";
@@ -34,6 +33,7 @@ import MintNFT from './pages/MintNFT';
 import NFTGenerator from './pages/NFTGenerator';
 import Contact from './pages/Contact';
 import RotatingStone from './pages/RotatingStone';
+import MintedNFTs from "./pages/Dashboard/AdminDashboard/MintedNFTs";
 
 function AppLayout() {
   const location = useLocation();
@@ -57,7 +57,6 @@ function AppLayout() {
           <Route path="/profile" element={<Profile />}>
             <Route index element={<UserDashboardHome />} />
             <Route path="dashboard" element={<ProfileDashboard/>} />
-            <Route path="trending-bids" element={<TrendingBids />} />
             <Route path="saved" element={<Saved />} />
             <Route path="collections" element={<Collections />} />
             <Route path="search" element={<Search />} />
@@ -65,10 +64,10 @@ function AppLayout() {
           <Route path="/admin" element={<AdminDashboardLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />
             <Route path="users" element={<UserDetails />} />
-            <Route path="upload-nft" element={<UploadNFT />} />
+            <Route path="create-nft" element={<CreateNFT />} />
+            <Route path="minted-nfts" element={<MintedNFTs />} />
             <Route path="market-place" element={<MarketPlace />} />
             <Route path="transactions" element={<Transactions />} />
-            <Route path="bid-details" element={<BidDetails />} />
             <Route path="create-level" element={<CreateLevel />} />
             <Route path="referral-details" element={<ReferralDetails />} />
             <Route index element={<AdminDashboard />} />
