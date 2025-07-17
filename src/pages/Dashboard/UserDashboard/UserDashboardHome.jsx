@@ -1,5 +1,6 @@
-import React from "react";
-import { FaUserCircle } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { getProfile } from "../../../api/auth";
 import { FaEthereum } from "react-icons/fa";
 import { FaPlus } from "react-icons/fa6";
 import { IoTrendingUpOutline } from "react-icons/io5";
@@ -14,97 +15,124 @@ const transactions = [
   { date: "05/06/2023", action: "Sell", token: "Cosmic eye #2150", price: "1.20 ETH" },
 ];
 
-const wallets = [
-  { name: "METAMASK", walletAddress: "0x093f91n", balance: "2.4356 ETH" },
-  { name: "WALLET CONNECT", walletAddress: "0x093f91n", balance: "2.4356 ETH" },
-];
-
 export default function UserDashboardHome() {
+  const reduxUser = useSelector(state => state.auth.user);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const data = await getProfile();
+        setUser(data.result);
+      } catch (err) {
+        setError("Failed to fetch profile from API. Showing cached info.");
+        setUser(reduxUser);
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+    // eslint-disable-next-line
+  }, []);
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center text-white text-xl">Loading profile...</div>;
+  }
+
+  if (!user) {
+    return <div className="min-h-screen flex items-center justify-center text-white text-xl">No user profile found.</div>;
+  }
+
+  // Helper for address
+  const fullAddress = [user.addressLine, user.city, user.state, user.zipCode, user.countryCode].filter(Boolean).join(", ");
+
   return (
-    <>
-      {/* Header Section */}
-      <div className="flex flex-col md:flex-row items-center md:items-start md:justify-between gap-4 bg-[#FFFFFF1A] p-6 rounded-xl">
-        <div className="flex items-center gap-4">
-          <img src="/Images/profile.png" alt="img" className="w-[17%]" />
-          <div className="flex flex-col justify-between">
-            <h1 className="text-xl font-bold p-1">NFT PROJECT</h1>
-            <h1 className="text-xs text-gray-400 p-1">@nft project</h1>
-            <p className="text-sm text-gray-400 p-1">Digital artist and NFT collector. Creating unique pieces in the metaverse.</p>
-            <p className="text-xs text-gray-500 mt-1 p-1">Joined March 2022</p>
+    <div className="min-h-screen bg-black pt-8 pb-16 px-2 md:px-10">
+      {/* Profile Header */}
+      <div className="max-w-4xl mx-auto bg-[#1a1a2e] rounded-2xl shadow-lg p-6 md:p-10 flex flex-col md:flex-row gap-8 items-center mb-10">
+        <img
+          src={user.profileImage || "/Images/profile.png"}
+          alt="Profile"
+          className="w-32 h-32 rounded-full border-4 border-purple-500 object-cover shadow-lg"
+        />
+        <div className="flex-1 w-full">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold text-white">{user.firstName} {user.lastName} <span className="text-purple-400 text-lg font-normal">({user.userName})</span></h1>
+              <p className="text-gray-400 text-sm mt-1">{user.email}</p>
+              <p className="text-gray-400 text-sm">Wallet Address: <span className="text-white font-mono">{user.walletAddress || "-"}</span></p>
+              <p className="text-gray-400 text-sm">USDT Wallet: <span className="text-white">{user.usdtWallet}</span></p>
+              <p className="text-gray-400 text-sm">Referral Code: <span className="text-white">{user.referralCode}</span></p>
+            </div>
+            <div className="flex flex-col gap-2 items-end">
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.status === "ACTIVE" ? "bg-green-700 text-green-200" : "bg-red-700 text-red-200"}`}>{user.status}</span>
+              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${user.isVerified ? "bg-blue-700 text-blue-200" : "bg-yellow-700 text-yellow-200"}`}>{user.isVerified ? "Verified" : "Not Verified"}</span>
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-purple-700 text-purple-200">{user.userType}</span>
+            </div>
           </div>
+          <div className="flex flex-wrap gap-4 mt-4 text-gray-300 text-sm">
+            <div><span className="font-semibold text-white">Phone:</span> {user.mobileNumber || "-"}</div>
+            <div><span className="font-semibold text-white">DOB:</span> {user.dateOfBirth || "-"}</div>
+            <div><span className="font-semibold text-white">Joined:</span> {user.createdAt ? new Date(user.createdAt).toLocaleDateString() : "-"}</div>
+          </div>
+          <div className="mt-2 text-gray-300 text-sm"><span className="font-semibold text-white">Address:</span> {fullAddress || "-"}</div>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
-        {/* Transaction History */}
-        <div className="bg-[#FFFFFF1A] p-4 rounded-xl col-span-2">
-          <h2 className="text-lg font-semibold mb-4">Transaction History</h2>
-          <table className="w-full text-sm">
-            <thead className="">
-              <tr>
-                <th className="text-left py-2">Date</th>
-                <th className="text-left py-2">Action</th>
-                <th className="text-left py-2">Token</th>
-                <th className="text-left py-2">Price</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transactions.map((tx, i) => (
-                <tr key={i} className=" ">
-                  <td className="py-2 text-gray-400">{tx.date}</td>
-                  <td className={`py-2 font-bold ${tx.action === "Buy" ? "  text-green-500" : "text-red-500"}`}>{tx.action}</td>
-                  <td className="py-2 text-gray-300">{tx.token}</td>
-                  <td className="py-2 text-white">{tx.price}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+      {error && <div className="text-red-400 text-center mt-4">{error}</div>}
 
+      {/* Wallet & Stats */}
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
         {/* Wallet Balance */}
-        <div className="bg-[#FFFFFF1A] p-4 rounded-xl text-center">
-          <h2 className="text-2xl font-semibold mb-2">Wallet Balance</h2>
-          <div className="text-2xl mt-8 font-bold text-white">2.4356 ETH</div>
-          <div className="text-sm mt-4 text-gray-400">$2,368 USD</div>
+        <div className="bg-[#23234a] p-6 rounded-xl text-center shadow">
+          <h2 className="text-lg font-semibold mb-2 text-white">Wallet Balance</h2>
+          <div className="text-2xl mt-4 font-bold text-white">{user.wallet} ETH</div>
+          <div className="text-sm mt-2 text-gray-400">USDT: {user.usdtWallet}</div>
           <div className="text-green-500 mt-4 text-xs flex gap-2 justify-center items-center"><IoTrendingUpOutline className="text-xl"/>2.4% (24h)</div>
         </div>
-
-        {/* Total Volume */}
-        <div className="bg-[#FFFFFF1A] p-4 rounded-xl">
+        {/* Total Volume (Placeholder) */}
+        <div className="bg-[#23234a] p-6 rounded-xl text-center shadow">
           <h2 className="text-sm text-gray-400">Total Volume</h2>
-          <div className="text-xl font-bold text-white flex items-center gap-2">
-            <FaEthereum /> 2.4356 ETH
+          <div className="text-xl font-bold text-white flex items-center gap-2 justify-center">
+            <FaEthereum /> {user.totalVolume ? `${user.totalVolume} ETH` : "-"}
           </div>
           <div className="text-green-500 text-sm mt-1">+2.4%</div>
         </div>
-
-        {/* Total Transactions */}
-        <div className="bg-[#FFFFFF1A]  p-4 rounded-xl">
+        {/* NFTs Traded (Placeholder) */}
+        <div className="bg-[#23234a] p-6 rounded-xl text-center shadow">
           <h2 className="text-sm text-gray-400">NFTs Traded</h2>
-          <div className="text-xl font-bold text-white">89</div>
+          <div className="text-xl font-bold text-white">{user.nftsTraded || "-"}</div>
           <div className="text-green-500 text-sm mt-1">+6.4%</div>
         </div>
-
-        {/* Linked Wallets */}
-        <div className="bg-[#FFFFFF1A]  p-4 rounded-xl md:col-span-1">
-          <h2 className="text-lg font-semibold mb-4">Linked Wallets</h2>
-          {wallets.map((wallet, index) => (
-            <div key={index} className="mb-3 bg-[#FFFFFF33] flex w-full justify-between items-center  px-10 py-6 rounded-2xl">
-              <div className="">
-                <div className="flex flex-col">
-                  <p className="text-sm text-white font-semibold">{wallet.name}</p>
-                  <p className="text-xs text-gray-400">{wallet.walletAddress}</p>
-                </div>
-                <p className="text-sm font-bold text-white">{wallet.balance}</p>
-              </div>
-              <IoCopyOutline  className="text-2xl"/>
-            </div>
-          ))}
-          <button className="mt-4 flex items-center gap-2 bg-purple-600 text-white py-2 px-4 rounded-2xl text-sm">
-            <FaPlus className="text-lg" /> Link new wallet
-          </button>
-        </div>
       </div>
-    </>
+
+      {/* Transaction History */}
+      <div className="max-w-4xl mx-auto bg-[#1a1a2e] p-6 rounded-xl shadow">
+        <h2 className="text-lg font-semibold mb-4 text-white">Transaction History</h2>
+        <table className="w-full text-sm">
+          <thead>
+            <tr>
+              <th className="text-left py-2 text-gray-400">Date</th>
+              <th className="text-left py-2 text-gray-400">Action</th>
+              <th className="text-left py-2 text-gray-400">Token</th>
+              <th className="text-left py-2 text-gray-400">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            {transactions.map((tx, i) => (
+              <tr key={i} className="border-b border-gray-800 last:border-0">
+                <td className="py-2 text-gray-400">{tx.date}</td>
+                <td className={`py-2 font-bold ${tx.action === "Buy" ? "text-green-500" : "text-red-500"}`}>{tx.action}</td>
+                <td className="py-2 text-gray-300">{tx.token}</td>
+                <td className="py-2 text-white">{tx.price}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
   );
 } 

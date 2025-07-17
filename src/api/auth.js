@@ -15,6 +15,14 @@ export const getCurrentUser = async () => {
   return response.data;
 };
 
+export const getProfile = async () => {
+  const token = localStorage.getItem('token');
+  const response = await api.get('/user/getProfile', {
+    headers: { Authorization: token }
+  });
+  return response.data;
+};
+
 export const adminLogin = async (credentials) => {
   const response = await api.post('/admin/adminLogin', credentials);
   return response.data;

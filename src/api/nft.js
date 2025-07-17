@@ -32,7 +32,8 @@ export const listAllNFTs = async () => {
 };
 
 export const listNFTForSell = async (nftData) => {
-  const response = await api.put('/nft/listNftForSell', nftData);
+  const response = await api.put('/nft/listNftForSell', nftData,
+  );
   return response.data;
 };
 
@@ -52,5 +53,13 @@ export const fetchNFTsByListedStatus = async (listedStatus = true) => {
 
 export const fetchMarketplaceNFTs = async () => {
   const response = await api.get('/nft/marketplace');
+  return response.data;
+};
+
+export const buyNFT = async (nftId, transactionHash) => {
+  const token = localStorage.getItem('token');
+  const response = await api.post('/nft/buyNft', {nftId, transactionHash }, {
+    headers: { Authorization: token }
+  });
   return response.data;
 }; 

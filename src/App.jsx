@@ -20,7 +20,6 @@ import UserDetails from "./pages/Dashboard/AdminDashboard/UserDetails";
 import CreateNFT from "./pages/Dashboard/AdminDashboard/UploadNFT";
 import MarketPlace from "./pages/Dashboard/AdminDashboard/MarketPlace";
 import Transactions from "./pages/Dashboard/AdminDashboard/Transactions";
-// import BidDetails from "./pages/Dashboard/AdminDashboard/BidDetails";
 import CreateLevel from "./pages/Dashboard/AdminDashboard/CreateLevel";
 import ReferralDetails from "./pages/Dashboard/AdminDashboard/ReferralDetails";
 import ArtistPage from "./pages/ArtistPage";
@@ -34,11 +33,52 @@ import NFTGenerator from './pages/NFTGenerator';
 import Contact from './pages/Contact';
 import RotatingStone from './pages/RotatingStone';
 import MintedNFTs from "./pages/Dashboard/AdminDashboard/MintedNFTs";
+import Owned from "./pages/Dashboard/UserDashboard/Owned";
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginSuccess } from './redux/slices/authSlice';
+import { getProfile } from './api/auth';
+import { connectWallet } from './redux/slices/nftSlice';
 
 function AppLayout() {
   const location = useLocation();
-  const hideNavbarOnRoutes = ["/dash","/trending-bids","/saved","/collections","/rare-NFTS"];
+  const hideNavbarOnRoutes = ["/dash","/trending-bids","/saved","/collections","/owned"];
   const shouldHideNavbar = hideNavbarOnRoutes.includes(location.pathname);
+
+  // --- USER REHYDRATION LOGIC ---
+  const dispatch = useDispatch();
+  const user = useSelector(state => state.auth.user);
+  const token = localStorage.getItem('token');
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (token && !user) {
+        try {
+          const data = await getProfile();
+          if (data && data.result) {
+            localStorage.setItem('user', JSON.stringify(data.result));
+            dispatch(loginSuccess({ token, user: data.result }));
+          }
+        } catch (err) {
+          localStorage.removeItem('token');
+          localStorage.removeItem('user');
+        }
+      }
+    };
+    fetchProfile();
+  }, [token, user, dispatch]);
+  // --- END USER REHYDRATION LOGIC ---
+
+  // --- WALLET REHYDRATION LOGIC ---
+  useEffect(() => {
+    const savedWallet = localStorage.getItem('wallet');
+    if (savedWallet) {
+      const { walletAddress, balance, walletType } = JSON.parse(savedWallet);
+      if (walletAddress) {
+        dispatch(connectWallet({ walletAddress, balance, walletType }));
+      }
+    }
+  }, [dispatch]);
+  // --- END WALLET REHYDRATION LOGIC ---
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -60,6 +100,7 @@ function AppLayout() {
             <Route path="saved" element={<Saved />} />
             <Route path="collections" element={<Collections />} />
             <Route path="search" element={<Search />} />
+            <Route path="owned" element={<Owned/>} />
           </Route>
           <Route path="/admin" element={<AdminDashboardLayout />}>
             <Route path="dashboard" element={<AdminDashboard />} />

@@ -5,6 +5,7 @@ import { IoStatsChart, IoTime } from 'react-icons/io5';
 import NFTCard from '../components/NFTCard';
 import { getNFTDetail } from '../api/nft';
 import { useSelector } from 'react-redux';
+import { buyNFT, listNFTForSell } from '../api/nft';
 import { ethers, BrowserProvider } from "ethers";
 import { TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, USDT_TOKEN_ADDRESS } from "../contract/nftContract";
 
@@ -46,21 +47,22 @@ const NFTDetail = () => {
     try {
       if (!window.ethereum) throw new Error("Please install MetaMask!");
       await window.ethereum.request({ method: "eth_requestAccounts" });
-      // ethers v6+: use BrowserProvider
       const provider = new BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
 
       // 1. Approve USDT for the NFT price (assume USDT has 6 decimals)
       const usdt = new ethers.Contract(USDT_TOKEN_ADDRESS, USDT_ABI, signer);
-      const price = ethers.BigNumber.from(nft.listedPrice.toString());
+      const price = ethers.parseUnits(nft.listedPrice.toString(), 6); // USDT usually has 6 decimals
       const approveTx = await usdt.approve(TRADE_ARENA_NFT_ADDRESS, price);
       await approveTx.wait();
 
-      // 2. Call buyNFT on the contract
+      // 2. Call buyNFT on the contract and get the transaction hash
       const contract = new ethers.Contract(TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, signer);
-      const buyTx = await contract.buyNFT(nft.tokenId);
-      await buyTx.wait();
-
+      const tx = await contract.buyNFT(nft.tokenId);
+      await tx.wait();
+      
+      // 3. Send transaction hash to backend
+      await buyNFT(nft._id, tx.hash);
       alert("Purchase successful!");
       // Refresh NFT data
       const nftObj = await getNFTDetail(id);
@@ -88,6 +90,20 @@ const NFTDetail = () => {
       alert("Unlisting failed: " + (err.reason || err.message));
     }
     setUnlisting(false);
+  };
+
+  const handleList = async () => {
+    const price = prompt('Enter listing price (USDT):');
+    if (!price) return;
+    try {
+      await listNFTForSell({ nftId: nft._id, price });
+      alert('NFT listed successfully!');
+      // Refresh NFT data
+      const nftObj = await getNFTDetail(id);
+      setNft(nftObj);
+    } catch (err) {
+      alert('Listing failed: ' + (err.reason || err.message));
+    }
   };
 
   const formatPrice = (price, currency) => {
@@ -207,46 +223,57 @@ const NFTDetail = () => {
               </div>
             </div>
 
-            {/* Buy/Unlist Button or Status Message */}
-            {nft.isListed && nft.status === "LOCKED" ? (
-              walletAddress && nft.owner?.walletAddress && walletAddress.toLowerCase() === nft.owner.walletAddress.toLowerCase() ? (
-                <>
+            {/* Owner and Buyer Actions */}
+            {walletAddress && nft.owner?.walletAddress && walletAddress.toLowerCase() === nft.owner.walletAddress.toLowerCase() ? (
+              // OWNER VIEW
+              <>
+                {nft.isListed && nft.status === "LOCKED" ? (
+                  <>
+                    <button
+                      onClick={handleUnlist}
+                      disabled={unlisting}
+                      className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+                    >
+                      {unlisting ? "Unlisting..." : "Unlist from Marketplace"}
+                    </button>
+                    <div className="w-full text-center text-yellow-300 font-semibold mt-2">
+                      This NFT is locked for gameplay because it is listed for sale. Unlist to use in game.
+                    </div>
+                  </>
+                ) : !nft.isListed ? (
                   <button
-                    onClick={handleUnlist}
-                    disabled={unlisting}
-                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+                    onClick={handleList}
+                    className="w-full bg-green-600 hover:bg-green-700 text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
                   >
-                    {unlisting ? "Unlisting..." : "Unlist from Marketplace"}
+                    List NFT
                   </button>
-                  <div className="w-full text-center text-yellow-300 font-semibold mt-2">
-                    This NFT is locked for gameplay because it is listed for sale. Unlist to use in game.
+                ) : nft.status === "SOLD" ? (
+                  <div className="w-full text-center text-red-400 font-semibold mt-6">
+                    This NFT has already been sold.
                   </div>
-                </>
-              ) : (
-                <button
-                  onClick={handleBuyNow}
-                  disabled={buying}
-                  className="w-full bg-[#D54CFF] hover:bg-[#b13be0] text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
-                >
-                  {buying ? "Processing..." : `Buy Now for ${nft.listedPrice} USDT`}
-                </button>
-              )
-            ) : nft.isListed && nft.status !== "SOLD" ? (
-              <button
-                onClick={handleBuyNow}
-                disabled={buying}
-                className="w-full bg-[#D54CFF] hover:bg-[#b13be0] text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
-              >
-                {buying ? "Processing..." : `Buy Now for ${nft.listedPrice} USDT`}
-              </button>
-            ) : nft.status === "SOLD" ? (
-              <div className="w-full text-center text-red-400 font-semibold mt-6">
-                This NFT has already been sold.
-              </div>
+                ) : null}
+              </>
             ) : (
-              <div className="w-full text-center text-green-400 font-semibold mt-6">
-                This NFT is not listed for sale and is available for gameplay.
-              </div>
+              // NON-OWNER VIEW
+              <>
+                {nft.isListed && nft.status !== "SOLD" ? (
+                  <button
+                    onClick={handleBuyNow}
+                    disabled={buying}
+                    className="w-full bg-[#D54CFF] hover:bg-[#b13be0] text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+                  >
+                    {buying ? "Processing..." : `Buy Now for ${nft.listedPrice} USDT`}
+                  </button>
+                ) : nft.status === "SOLD" ? (
+                  <div className="w-full text-center text-red-400 font-semibold mt-6">
+                    This NFT has already been sold.
+                  </div>
+                ) : (
+                  <div className="w-full text-center text-green-400 font-semibold mt-6">
+                    This NFT is not listed for sale and is available for gameplay.
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

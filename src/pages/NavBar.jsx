@@ -3,6 +3,7 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FiMenu, FiX, FiUser } from "react-icons/fi";
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../redux/slices/authSlice';
+import { disconnectWallet } from '../redux/slices/nftSlice';
 
 const NavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -16,8 +17,10 @@ const NavBar = () => {
 
   const handleLogout = () => {
     dispatch(logout());
+    dispatch(disconnectWallet());
     localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('wallet');
     setDropdownOpen(false);
     navigate('/');
   };
@@ -79,7 +82,7 @@ const NavBar = () => {
               <div className="relative rounded-full">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className={`text-white text-sm font-semibold rounded-full px-6 py-2 transition flex items-center min-w-[110px] justify-center border-2 border-transparent hover:bg-white/20 hover:text-[#D54CFF] focus:bg-white/30 focus:text-[#D54CFF] ${dropdownOpen ? 'ring-2 ring-white/80' : ''}`}
+                  className={`text-white text-sm font-semibold rounded-full px-6 py-2 transition flex items-center min-w-[110px] justify-center border-2 border-transparent hover:bg-white/20 hover:text-[#D54CFF] focus:bg-white/30 focus:text-white ${dropdownOpen ? 'ring-2 ring-white/80' : ''}`}
                   style={{ outline: 'none' }}
                 >
                   <FiUser className="mr-2 w-5 h-5" />

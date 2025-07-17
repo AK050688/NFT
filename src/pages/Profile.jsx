@@ -8,12 +8,20 @@ const dashboardLinks = [
   { name: 'Dashboard', path: 'dashboard' },
   { name: 'Saved', path: 'saved' },
   { name: 'Collections', path: 'collections' },
+  {name:'Owned',path:'owned'}
   // { name: 'Search', path: 'search' }, // Uncomment if you want Search
 ];
 
 const Profile = () => {
   const user = useSelector(selectUser)
   console.log('>>>>>>>>>>>',user)
+  if (!user) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-white text-xl">
+        Please log in to view your profile.
+      </div>
+    );
+  }
   return (
     <div className="md:mt-24 mt-12">
       <div className="min-h-screen relative z-1  p-4 md:p-10 font-sans">
