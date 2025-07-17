@@ -4,6 +4,13 @@ import { FaEthereum, FaHeart, FaShare, FaEye, FaClock, FaTag, FaUser, FaHistory,
 import { IoStatsChart, IoTime } from 'react-icons/io5';
 import NFTCard from '../components/NFTCard';
 import { getNFTDetail } from '../api/nft';
+import { useSelector } from 'react-redux';
+import { ethers, BrowserProvider } from "ethers";
+import { TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, USDT_TOKEN_ADDRESS } from "../contract/nftContract";
+
+const USDT_ABI = [
+  "function approve(address spender, uint256 amount) public returns (bool)"
+];
 
 const NFTDetail = () => {
   const { id } = useParams();
@@ -11,6 +18,9 @@ const NFTDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [activeTab, setActiveTab] = useState('details');
   const [loading, setLoading] = useState(true);
+  const [buying, setBuying] = useState(false);
+  const [unlisting, setUnlisting] = useState(false);
+  const walletAddress = useSelector(state => state.wallet.walletAddress);
 
   useEffect(() => {
     const fetchNFT = async () => {
@@ -31,9 +41,53 @@ const NFTDetail = () => {
     // TODO: Implement like functionality
   };
 
-  const handleBuyNow = () => {
-    // TODO: Implement buy now functionality
-    console.log('Buying NFT for:', nft.price, 'ETH');
+  const handleBuyNow = async () => {
+    setBuying(true);
+    try {
+      if (!window.ethereum) throw new Error("Please install MetaMask!");
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      // ethers v6+: use BrowserProvider
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+
+      // 1. Approve USDT for the NFT price (assume USDT has 6 decimals)
+      const usdt = new ethers.Contract(USDT_TOKEN_ADDRESS, USDT_ABI, signer);
+      const price = ethers.BigNumber.from(nft.listedPrice.toString());
+      const approveTx = await usdt.approve(TRADE_ARENA_NFT_ADDRESS, price);
+      await approveTx.wait();
+
+      // 2. Call buyNFT on the contract
+      const contract = new ethers.Contract(TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, signer);
+      const buyTx = await contract.buyNFT(nft.tokenId);
+      await buyTx.wait();
+
+      alert("Purchase successful!");
+      // Refresh NFT data
+      const nftObj = await getNFTDetail(id);
+      setNft(nftObj);
+    } catch (err) {
+      alert("Purchase failed: " + (err.reason || err.message));
+    }
+    setBuying(false);
+  };
+
+  const handleUnlist = async () => {
+    setUnlisting(true);
+    try {
+      if (!window.ethereum) throw new Error("Please install MetaMask!");
+      await window.ethereum.request({ method: "eth_requestAccounts" });
+      const provider = new BrowserProvider(window.ethereum);
+      const signer = await provider.getSigner();
+      const contract = new ethers.Contract(TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, signer);
+      const tx = await contract.delistNFT(nft.tokenId);
+      await tx.wait();
+      alert("NFT unlisted successfully!");
+      const nftObj = await getNFTDetail(id);
+      setNft(nftObj);
+    } catch (err) {
+      alert("Unlisting failed: " + (err.reason || err.message));
+    }
+    setUnlisting(false);
   };
 
   const formatPrice = (price, currency) => {
@@ -152,6 +206,48 @@ const NFTDetail = () => {
                 <div className="text-xs text-gray-400 mt-1">Royalty</div>
               </div>
             </div>
+
+            {/* Buy/Unlist Button or Status Message */}
+            {nft.isListed && nft.status === "LOCKED" ? (
+              walletAddress && nft.owner?.walletAddress && walletAddress.toLowerCase() === nft.owner.walletAddress.toLowerCase() ? (
+                <>
+                  <button
+                    onClick={handleUnlist}
+                    disabled={unlisting}
+                    className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+                  >
+                    {unlisting ? "Unlisting..." : "Unlist from Marketplace"}
+                  </button>
+                  <div className="w-full text-center text-yellow-300 font-semibold mt-2">
+                    This NFT is locked for gameplay because it is listed for sale. Unlist to use in game.
+                  </div>
+                </>
+              ) : (
+                <button
+                  onClick={handleBuyNow}
+                  disabled={buying}
+                  className="w-full bg-[#D54CFF] hover:bg-[#b13be0] text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+                >
+                  {buying ? "Processing..." : `Buy Now for ${nft.listedPrice} USDT`}
+                </button>
+              )
+            ) : nft.isListed && nft.status !== "SOLD" ? (
+              <button
+                onClick={handleBuyNow}
+                disabled={buying}
+                className="w-full bg-[#D54CFF] hover:bg-[#b13be0] text-white font-semibold py-3 rounded-xl mt-6 transition text-lg"
+              >
+                {buying ? "Processing..." : `Buy Now for ${nft.listedPrice} USDT`}
+              </button>
+            ) : nft.status === "SOLD" ? (
+              <div className="w-full text-center text-red-400 font-semibold mt-6">
+                This NFT has already been sold.
+              </div>
+            ) : (
+              <div className="w-full text-center text-green-400 font-semibold mt-6">
+                This NFT is not listed for sale and is available for gameplay.
+              </div>
+            )}
           </div>
         </div>
 

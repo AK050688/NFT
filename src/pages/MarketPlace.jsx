@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { fetchNFTsByListedStatus } from '../api/nft';
+import { fetchMarketplaceNFTs } from '../api/nft';
 import NFTCard from '../components/NFTCard';
 
 const listData = [
@@ -23,7 +23,7 @@ export default function MarketPlace() {
       setLoading(true);
       setError('');
       try {
-        const data = await fetchNFTsByListedStatus(true);
+        const data = await fetchMarketplaceNFTs();
         setNfts(Array.isArray(data.result) ? data.result : []);
       } catch (e) {
         setError('Failed to load NFTs');

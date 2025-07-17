@@ -48,4 +48,9 @@ export const fetchNFTsByListedStatus = async (listedStatus = true) => {
     headers: { Authorization: token }
   });
   return response.data;
+};
+
+export const fetchMarketplaceNFTs = async () => {
+  const response = await api.get('/nft/marketplace');
+  return response.data;
 }; 
