@@ -62,4 +62,13 @@ export const buyNFT = async (nftId, transactionHash) => {
     headers: { Authorization: token }
   });
   return response.data;
+};
+
+export const likeOrDislikeNFT = async (nftId, like) => {
+  const token = localStorage.getItem('token');
+  console.log("Sending like/dislike request:", { nftId, like, token });
+  const response = await api.put('/nft/likeAndDislike', { nftId, like }, {
+    headers: { Authorization: token, 'Content-Type': 'application/json' }
+  });
+  return response.data;
 }; 

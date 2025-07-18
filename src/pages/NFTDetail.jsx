@@ -5,7 +5,7 @@ import { IoStatsChart, IoTime } from 'react-icons/io5';
 import NFTCard from '../components/NFTCard';
 import { getNFTDetail } from '../api/nft';
 import { useSelector } from 'react-redux';
-import { buyNFT, listNFTForSell } from '../api/nft';
+import { buyNFT, listNFTForSell, likeOrDislikeNFT } from '../api/nft';
 import { ethers, BrowserProvider } from "ethers";
 import { TRADE_ARENA_NFT_ADDRESS, TRADE_ARENA_NFT_ABI, USDT_TOKEN_ADDRESS } from "../contract/nftContract";
 
@@ -22,6 +22,9 @@ const NFTDetail = () => {
   const [buying, setBuying] = useState(false);
   const [unlisting, setUnlisting] = useState(false);
   const walletAddress = useSelector(state => state.wallet.walletAddress);
+  const userId = useSelector(state => state.auth.user?._id);
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   useEffect(() => {
     const fetchNFT = async () => {
@@ -29,17 +32,32 @@ const NFTDetail = () => {
       try {
         const nftObj = await getNFTDetail(id);
         setNft(nftObj); // Set the NFT object directly
+        setIsLiked(Array.isArray(nftObj?.likedBy) && userId && nftObj.likedBy.includes(userId));
+        setLikeCount(nftObj?.likeCount || 0);
       } catch (err) {
         setNft(null);
       }
       setLoading(false);
     };
     fetchNFT();
-  }, [id]);
+  }, [id, userId]);
 
-  const handleLike = () => {
-    setIsLiked(!isLiked);
-    // TODO: Implement like functionality
+  const handleLike = async () => {
+    if (likeLoading) return; // Prevent double click
+    setLikeLoading(true);
+    const nextLike = isLiked ? "false" : "true";
+    console.log("isLiked before click:", isLiked, "sending nextLike:", nextLike);
+    try {
+      await likeOrDislikeNFT(nft._id, nextLike);
+      const nftObj = await getNFTDetail(id);
+      console.log("NFT detail after like/dislike:", nftObj);
+      setNft(nftObj);
+      setIsLiked(Array.isArray(nftObj?.likedBy) && userId && nftObj.likedBy.includes(userId));
+      setLikeCount(nftObj?.likeCount || 0);
+    } catch (err) {
+      alert('Failed to like/dislike NFT.');
+    }
+    setLikeLoading(false);
   };
 
   const handleBuyNow = async () => {
@@ -187,6 +205,16 @@ const NFTDetail = () => {
               <div className="flex flex-wrap gap-4 items-center mb-4">
                 <span className="bg-[#232046] text-purple-300 px-3 py-1 rounded-full text-xs font-semibold">Token ID: {nft.tokenId}</span>
                 <span className="bg-[#232046] text-green-300 px-3 py-1 rounded-full text-xs font-semibold">Status: {nft.status}</span>
+                <button
+                  onClick={handleLike}
+                  disabled={likeLoading}
+                  className={`flex  items-center gap-1 px-3 py-1 rounded-full text-xs font-semibold transition-colors ${isLiked ? 'bg-pink-600 text-white' : 'bg-[#232046] text-pink-300 hover:bg-pink-700'}`}
+                  aria-label={isLiked ? 'Dislike' : 'Like'}
+                >
+                  <FaHeart className={isLiked ? 'text-white' : 'text-pink-300'} />
+                  <span>Like</span>
+                  <span>{likeCount}</span>
+                </button>
               </div>
             </div>
 
@@ -292,4 +320,4 @@ const NFTDetail = () => {
   );
 };
 
-export default NFTDetail; 
+export default NFTDetail;
